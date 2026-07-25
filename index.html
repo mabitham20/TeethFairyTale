@@ -1,1 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Tooth Fairy Food Catcher 🧚</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: linear-gradient(180deg, #1a0533 0%, #2d0a5e 40%, #0a1a4a 100%);
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", "Segoe UI", Tahoma, sans-serif;
+      user-select: none;
+      touch-action: none;
+    }
+
+    /* ══════════════════════════════════════
+     STARS CANVAS
+  ══════════════════════════════════════ */
+    #stars-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ══════════════════════════════════════
+     HUD — top bar
+  ══════════════════════════════════════ */
+    #hud {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      z-index: 100;
+      gap: 10px;
+    }
+
+    #hud .title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #f9e4ff;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1 1 auto;
+    }
+
+    #hud-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.15;
+      flex: 0 0 auto;
+    }
+
+    #score-wrap {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffe94d;
+      white-space: nowrap;
+    }
+
+    #target-text {
+      font-size: 13px;
+      color: #ffe94d;
+      opacity: 0.7;
+      font-weight: 600;
+    }
+
+    #timer-wrap {
+      font-size: 13px;
+      font-weight: 700;
+      color: #8de6ff;
+      white-space: nowrap;
+    }
+
+    #timer-wrap.low {
+      color: #ff6b6b;
+    }
+
+    #health-wrap {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+
+    .tooth-life {
+      font-size: 28px;
+      line-height: 1;
+      transition: opacity 0.3s, filter 0.3s;
+    }
+
+    .tooth-life.lost {
+      opacity: 0.2;
+      filter: grayscale(1);
+    }
+
+    /* ══════════════════════════════════════
+     GAME AREA
+  ══════════════════════════════════════ */
+    #game-area {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* ══════════════════════════════════════
+     FAIRY
+  ══════════════════════════════════════ */
+    #fairy {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      pointer-events: none;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: drop-shadow(0 0 18px #c77dffcc);
+    }
+
+    #fairy-emoji {
+      font-size: 90px;
+      line-height: 1;
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    }
+
+    #fairy img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* ══════════════════════════════════════
+     FALLING FOOD ITEMS
+  ══════════════════════════════════════ */
+    .food-item {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+      transform: translateX(-50%);
+      z-index: 5;
+    }
+
+    .food-emoji-el {
+      font-size: 64px;
+      line-height: 1;
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+      display: block;
+      text-align: center;
+    }
+
+    .food-item img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+    }
+
+    .food-label {
+      margin-top: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      padding: 3px 10px;
+      white-space: nowrap;
+      font-family: "Segoe UI", sans-serif;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* ══════════════════════════════════════
+     CATCH BURST TEXT
+  ══════════════════════════════════════ */
+    .burst {
+      position: absolute;
+      font-size: 28px;
+      font-weight: 900;
+      pointer-events: none;
+      transform: translateX(-50%);
+      z-index: 20;
+      white-space: nowrap;
+      animation: burst-up 0.9s ease-out forwards;
+      text-shadow: 0 2px 8px #000c;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    @keyframes burst-up {
+      0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+      }
+
+      60% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-60px) scale(1.3);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-110px) scale(0.8);
+      }
+    }
+
+    .burst.good {
+      color: #7aff7a;
+    }
+
+    .burst.bad {
+      color: #ff4f4f;
+    }
+
+    .burst.neutral {
+      color: #ffd54d;
+    }
+
+    /* ══════════════════════════════════════
+     SPARKLES
+  ══════════════════════════════════════ */
+    .sparkle {
+      position: absolute;
+      font-size: 22px;
+      pointer-events: none;
+      z-index: 15;
+      animation: sparkle-fade 0.7s ease-out forwards;
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    }
+
+    @keyframes sparkle-fade {
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(0.2) translateY(-40px);
+      }
+    }
+
+    /* ══════════════════════════════════════
+     INFO CARD (top popup)
+  ══════════════════════════════════════ */
+    #info-card {
+      position: fixed;
+      top: 72px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: min(420px, calc(100vw - 32px));
+      background: rgba(8, 2, 26, 0.96);
+      border: 1px solid rgba(200, 150, 255, 0.45);
+      border-radius: 20px;
+      padding: 18px 22px;
+      z-index: 500;
+      text-align: center;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 40px rgba(140, 0, 255, 0.3);
+      animation: card-in 0.3s ease-out;
+    }
+
+    @keyframes card-in {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    #info-card .ci {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin: 0 auto 6px auto;
+      display: block;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+    }
+
+    #info-card .cn {
+      font-size: 18px;
+      font-weight: 800;
+      color: #f0d0ff;
+      margin-bottom: 5px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    #info-card .ct {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    #info-card .ct.good {
+      color: #7aff7a;
+    }
+
+    #info-card .ct.bad {
+      color: #ff6060;
+    }
+
+    #info-card .ct.neutral {
+      color: #ffd54d;
+    }
+
+    #info-card .cd {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #ccc;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    /* ══════════════════════════════════════
+     FULL-SCREEN OVERLAY SCREENS
+  ══════════════════════════════════════ */
+    .screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 400;
+      text-align: center;
+      padding: 30px 20px;
+      background: linear-gradient(180deg, rgba(26, 5, 51, 0.97) 0%, rgba(10, 26, 74, 0.97) 100%);
+      backdrop-filter: blur(6px);
+      overflow-y: auto;
+    }
+
+    .big-emoji {
+      font-size: 90px;
+      line-height: 1;
+      margin-bottom: 16px;
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    }
+
+    .screen h1 {
+      font-size: 44px;
+      font-weight: 900;
+      color: #f0d0ff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 40px #c77dff;
+      line-height: 1.15;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .screen>p {
+      font-size: 17px;
+      color: #ccc;
+      margin-bottom: 18px;
+      max-width: 440px;
+      line-height: 1.6;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .btn {
+      padding: 14px 40px;
+      background: linear-gradient(135deg, #7b2fff, #c77dff);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      margin: 6px;
+      box-shadow: 0 5px 24px rgba(140, 0, 255, 0.5);
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+      font-family: "Segoe UI", sans-serif;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 8px 32px rgba(140, 0, 255, 0.7);
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn.small {
+      padding: 10px 26px;
+      font-size: 15px;
+    }
+
+    .btn.secondary {
+      background: linear-gradient(135deg, #3a3a55, #5c5c85);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.35);
+    }
+
+    .final-score {
+      font-size: 70px;
+      font-weight: 900;
+      color: #c77dff;
+      text-shadow: 0 0 30px #c77dff;
+      margin: 8px 0 4px;
+      line-height: 1;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .score-label {
+      font-size: 15px;
+      color: #aaa;
+      margin-bottom: 20px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    /* ── Level select cards ── */
+    #level-list {
+      width: min(440px, 92vw);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .level-card {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 16px;
+      padding: 14px 18px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      transition: border-color 0.15s;
+    }
+
+    .level-card.cleared {
+      border-color: rgba(122, 255, 122, 0.5);
+    }
+
+    .level-card.locked {
+      opacity: 0.45;
+    }
+
+    .lc-info {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .lc-num {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #c77dff;
+    }
+
+    .lc-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: #f0d0ff;
+      margin: 2px 0 4px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .lc-obj {
+      font-size: 12.5px;
+      color: #bbb;
+      line-height: 1.4;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .lc-check {
+      font-size: 13px;
+      color: #7aff7a;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* ══════════════════════════════════════
+     MOBILE ≤ 600px
+  ══════════════════════════════════════ */
+    @media (max-width: 600px) {
+      #hud {
+        height: 52px;
+        padding: 0 12px;
+      }
+
+      #hud .title {
+        font-size: 14px;
+      }
+
+      #score-wrap {
+        font-size: 15px;
+      }
+
+      #target-text {
+        font-size: 11px;
+      }
+
+      #timer-wrap {
+        font-size: 11px;
+      }
+
+      .tooth-life {
+        font-size: 20px;
+      }
+
+      #game-area {
+        top: 52px;
+      }
+
+      #fairy {
+        width: 68px;
+        height: 68px;
+      }
+
+      #fairy-emoji {
+        font-size: 54px;
+      }
+
+      .food-emoji-el {
+        font-size: 40px;
+      }
+
+      .food-item img {
+        width: 46px;
+        height: 46px;
+      }
+
+      .food-label {
+        font-size: 10px;
+        padding: 2px 7px;
+      }
+
+      .burst {
+        font-size: 18px;
+      }
+
+      .sparkle {
+        font-size: 15px;
+      }
+
+      .big-emoji {
+        font-size: 60px;
+        margin-bottom: 10px;
+      }
+
+      .screen h1 {
+        font-size: 28px;
+      }
+
+      .screen>p {
+        font-size: 14px;
+      }
+
+      .btn {
+        font-size: 15px;
+        padding: 12px 32px;
+      }
+
+      .final-score {
+        font-size: 52px;
+      }
+
+      .lc-name {
+        font-size: 14.5px;
+      }
+
+      .lc-obj {
+        font-size: 11.5px;
+      }
+
+      .btn.small {
+        font-size: 13px;
+        padding: 8px 18px;
+      }
+
+      #info-card {
+        top: 58px;
+        padding: 12px 16px;
+        border-radius: 16px;
+      }
+
+      #info-card .ci {
+        width: 44px;
+        height: 44px;
+        margin-bottom: 3px;
+      }
+
+      #info-card .cn {
+        font-size: 14px;
+        margin-bottom: 3px;
+      }
+
+      #info-card .ct {
+        font-size: 10px;
+        margin-bottom: 5px;
+      }
+
+      #info-card .cd {
+        font-size: 11.5px;
+        line-height: 1.45;
+      }
+    }
+
+    /* ══════════════════════════════════════
+     TABLET 601px – 1023px
+  ══════════════════════════════════════ */
+    @media (min-width: 601px) and (max-width: 1023px) {
+      #hud {
+        height: 58px;
+      }
+
+      #hud .title {
+        font-size: 17px;
+      }
+
+      #score-wrap {
+        font-size: 17px;
+      }
+
+      .tooth-life {
+        font-size: 26px;
+      }
+
+      #game-area {
+        top: 58px;
+      }
+
+      #fairy {
+        width: 90px;
+        height: 90px;
+      }
+
+      #fairy-emoji {
+        font-size: 70px;
+      }
+
+      .food-emoji-el {
+        font-size: 50px;
+      }
+
+      .food-item img {
+        width: 58px;
+        height: 58px;
+      }
+
+      .big-emoji {
+        font-size: 78px;
+      }
+
+      .screen h1 {
+        font-size: 38px;
+      }
+
+      .screen>p {
+        font-size: 16px;
+      }
+
+      .btn {
+        font-size: 17px;
+        padding: 13px 36px;
+      }
+
+      .final-score {
+        font-size: 64px;
+      }
+
+      #info-card {
+        top: 66px;
+      }
+    }
+
+    /* ══════════════════════════════════════
+     RED FLASH overlay
+  ══════════════════════════════════════ */
+    #red-flash {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 0, 0, 0.22);
+      pointer-events: none;
+      z-index: 300;
+      opacity: 0;
+      transition: opacity 0.08s;
+    }
+
+    #red-flash.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Stars -->
+  <canvas id="stars-canvas"></canvas>
+
+  <!-- Red flash -->
+  <div id="red-flash"></div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div class="title" id="hud-title">🧚 Tooth Fairy</div>
+    <div id="hud-center">
+      <div id="score-wrap">⭐ <span id="score-val">0</span><span id="target-text"></span></div>
+      <div id="timer-wrap" style="display:none">⏱ <span id="timer-val">--</span>s</div>
+    </div>
+    <div id="health-wrap">
+      <span class="tooth-life" id="h1">🦷</span>
+      <span class="tooth-life" id="h2">🦷</span>
+      <span class="tooth-life" id="h3">🦷</span>
+    </div>
+  </div>
+
+  <!-- Game area -->
+  <div id="game-area">
+    <div id="fairy">
+      <span id="fairy-emoji">🧚‍♀️</span>
+    </div>
+  </div>
+
+  <!-- START / LEVEL SELECT SCREEN -->
+  <div id="start-screen" class="screen">
+    <div class="big-emoji">🧚‍♀️</div>
+    <h1>Tooth Fairy<br>Food Catcher</h1>
+    <p>Choose a level to begin!</p>
+    <div id="level-list"></div>
+  </div>
+
+  <!-- LEVEL CLEAR SCREEN -->
+  <div id="levelclear-screen" class="screen" style="display:none">
+    <div class="big-emoji">🎉</div>
+    <h1 id="lc-title">Level Complete!</h1>
+    <p>Nice catching! Here's your score:</p>
+    <div class="final-score" id="lc-score">0</div>
+    <div class="score-label">Score</div>
+    <div>
+      <button class="btn" id="lc-next-btn" onclick="nextLevel()">Next Level ➡️</button>
+      <button class="btn secondary" onclick="goToLevelSelect()">Level Select</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER SCREEN -->
+  <div id="gameover-screen" class="screen" style="display:none">
+    <div class="big-emoji">💔</div>
+    <h1 id="gameover-title">Level Failed!</h1>
+    <p id="gameover-msg">Give it another shot!</p>
+    <div class="final-score" id="final-score">0</div>
+    <div class="score-label">Final Score</div>
+    <div>
+      <button class="btn" onclick="retryLevel()">Try Again 🔁</button>
+      <button class="btn secondary" onclick="goToLevelSelect()">Level Select</button>
+    </div>
+  </div>
+
+  <script>
+    /* ════════════════════════════════════════════
+       IMAGE ERROR FALLBACK HANDLER
+    ════════════════════════════════════════════ */
+    function handleImgError(imgEl, fallbackEmoji) {
+      if (!imgEl.dataset.triedFallback) {
+        imgEl.dataset.triedFallback = "1";
+        const src = imgEl.getAttribute('src');
+        const filename = src.split('/').pop();
+        const baseName = filename.replace(/\.(jpeg|jpg|png|webp)$/i, '');
+
+        // Try alternate path combinations
+        if (src.startsWith('images/')) {
+          imgEl.src = filename;
+          return;
+        } else {
+          imgEl.src = 'images/' + filename;
+          return;
+        }
+      } else if (imgEl.dataset.triedFallback === "1") {
+        imgEl.dataset.triedFallback = "2";
+        const src = imgEl.getAttribute('src');
+        const filename = src.split('/').pop();
+        const baseName = filename.replace(/\.(jpeg|jpg|png|webp)$/i, '');
+        if (filename.endsWith('.jpeg')) {
+          imgEl.src = baseName + '.jpg';
+          return;
+        } else if (filename.endsWith('.jpg')) {
+          imgEl.src = baseName + '.jpeg';
+          return;
+        }
+      }
+
+      // If image still fails to load, replace with emoji
+      const parent = imgEl.parentNode;
+      if (parent) {
+        const span = document.createElement('span');
+        span.className = imgEl.classList.contains('ci') ? 'ci' : 'food-emoji-el';
+        span.style.fontSize = imgEl.classList.contains('ci') ? '48px' : '';
+        span.textContent = fallbackEmoji || '🍎';
+        parent.replaceChild(span, imgEl);
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       LEVEL CONFIG
+    ════════════════════════════════════════════ */
+    const LEVELS = [
+      {
+        id: 1,
+        shortName: 'Healthy vs Junk',
+        title: 'Level 1 · Healthy vs Junk',
+        subtitle: 'Catch good foods, dodge bad ones. Reach 60 points before losing all 3 teeth.',
+        targetScore: 60,
+        lives: 3,
+        timeLimit: null,
+        spawnMs: 2400,
+        items: [
+          { img: 'peanut.png', emoji: '🥜', name: 'Peanut', points: 10, weight: 10, sub: 'Vitamin E', tagline: 'Fast Healing!', detail: 'Protects oral tissues and supports healing.' },
+          { img: 'eggs.png', emoji: '🥚', name: 'Eggs', points: 10, weight: 10, sub: 'Vitamin D', tagline: 'Strong Teeth!', detail: 'Helps calcium absorption for strong teeth and jaw bones.' },
+          { img: 'broccoli.png', emoji: '🥦', name: 'Broccoli', points: 10, weight: 10, sub: 'Vitamin C', tagline: 'Healthy Gums!', detail: 'Builds collagen, prevents bleeding gums, and speeds healing.' },
+          { img: 'spinach.png', emoji: '🥬', name: 'Spinach', points: 10, weight: 10, sub: 'Vitamin K', tagline: 'Healthy Gums!', detail: 'Helps blood clotting and reduces gum bleeding.' },
+          { img: 'guava.png', emoji: '🍐', name: 'Guava', points: 10, weight: 10, sub: 'Vitamin C', tagline: 'Healthy Gums!', detail: 'Packed with vitamin C for strong, healthy gums.' },
+          { img: 'milk.png', emoji: '🥛', name: 'Milk', points: 10, weight: 10, sub: 'Vitamin D', tagline: 'Strong Teeth!', detail: 'Helps calcium absorption for strong teeth and jaw bones.' },
+          { img: 'whole-grains.png', emoji: '🌾', name: 'Whole Grains', points: 10, weight: 10, sub: 'Vitamin B', tagline: 'Strong Oral Tissues!', detail: 'Prevents mouth ulcers, sore tongue, and cracked lips.' },
+          { img: 'fish.png', emoji: '🐟', name: 'Fish', points: 10, weight: 10, sub: 'Vitamin D', tagline: 'Strong Teeth!', detail: 'Rich in vitamin D and phosphorus for strong teeth.' },
+          { img: 'candy.png', emoji: '🍬', name: 'Candy', points: -10, weight: 6, tagline: 'Sugar Alert!', detail: 'Causes cavities by feeding plaque bacteria that produce acid.' },
+          { img: 'fried-chicken.png', emoji: '🍗', name: 'Fried Chicken', points: -10, weight: 6, tagline: 'Greasy & Sticky!', detail: 'Deep-fried coatings stick to teeth and feed plaque bacteria.' },
+          { img: 'cigs.png', emoji: '🚬', name: 'Cigarette', points: -10, weight: 6, tagline: 'Danger!', detail: 'Causes stained teeth, bad breath, gum disease, and greatly increases the risk of oral cancer.' },
+          { img: 'milkshake.png', emoji: '🥤', name: 'Milkshake', points: -10, weight: 6, tagline: 'Sugar Overload!', detail: 'Loaded with sugar that clings to teeth and fuels decay.' },
+          { img: 'chips.png', emoji: '🍟', name: 'Chips', points: -10, weight: 6, tagline: 'Sticky Starch!', detail: 'Starchy foods break down into sugars that feed plaque bacteria.' },
+          { img: 'cookie.png', emoji: '🍪', name: 'Cookie', points: -10, weight: 6, tagline: 'Too Much Sugar!', detail: 'Sugary cookies increase plaque, leading to cavities and tooth decay.' },
+          { img: 'cupcake.png', emoji: '🧁', name: 'Cupcake', points: -10, weight: 6, tagline: 'Sugar & Frosting!', detail: 'Sugary frosting coats teeth and speeds up enamel decay.' },
+          { img: 'soda.png', emoji: '🥤', name: 'Soda', points: -10, weight: 6, tagline: 'Acid Attack!', detail: 'Erodes tooth enamel, causes cavities, and can stain teeth.' },
+          { img: 'icecream.png', emoji: '🍨', name: 'Ice Cream', points: -10, weight: 6, tagline: 'Sugar Freeze!', detail: 'Sweet, sticky, and cold — a combination that stresses teeth and feeds decay.' },
+          { img: 'burger.png', emoji: '🍔', name: 'Burger', points: -10, weight: 6, tagline: 'Processed & Sugary!', detail: 'Refined buns and sauces add hidden sugar that isn’t tooth-friendly.' },
+        ]
+      },
+      {
+        id: 2,
+        shortName: 'Bonus & Trap Foods',
+        title: 'Level 2 · Bonus & Trap Foods',
+        subtitle: 'Score 100 points before time runs out! Bonus (+10), Super Bonus (+20), Neutral (0), Trap (-10).',
+        targetScore: 100,
+        lives: null,
+        timeLimit: 60,
+        spawnMs: 1400,
+        items: [
+          // 🟢 Bonus Foods (+10 points)
+          { emoji: '🍊', name: 'Orange', points: 10, weight: 8, sub: 'Vitamin C', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { img: 'guava.png', emoji: '🍐', name: 'Guava', points: 10, weight: 8, sub: 'Vitamin C', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { emoji: '🫒', name: 'Amla', points: 10, weight: 8, sub: 'Vitamin C', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { emoji: '🥕', name: 'Carrot', points: 10, weight: 8, sub: 'Vitamin A', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { img: 'spinach.png', emoji: '🥬', name: 'Spinach', points: 10, weight: 8, sub: 'Vitamin K', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { img: 'broccoli.png', emoji: '🥦', name: 'Broccoli', points: 10, weight: 8, sub: 'Vitamin C', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { emoji: '🥭', name: 'Mango', points: 10, weight: 8, sub: 'Vitamin A', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { emoji: '🍈', name: 'Papaya', points: 10, weight: 8, sub: 'Vitamin C', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { img: 'eggs.png', emoji: '🥚', name: 'Egg', points: 10, weight: 8, sub: 'Vitamin D', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { img: 'milk.png', emoji: '🥛', name: 'Milk', points: 10, weight: 8, sub: 'Vitamin D', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+
+          // ⭐ Special Bonus Foods (+20 points)
+          { emoji: '🫒', name: 'Amla', points: 20, weight: 2, sub: 'Super Vitamin C', tagline: 'Super Bonus +20!', detail: 'Extra vitamin-rich and rare — worth grabbing whenever it appears.' },
+          { img: 'guava.png', emoji: '🍐', name: 'Guava', points: 20, weight: 2, sub: 'Super Bonus +20!', detail: 'Extra vitamin-rich and rare — worth grabbing whenever it appears.' },
+          { img: 'spinach.png', emoji: '🥬', name: 'Spinach', points: 20, weight: 2, sub: 'Super Bonus +20!', detail: 'Extra vitamin-rich and rare — worth grabbing whenever it appears.' },
+          { img: 'broccoli.png', emoji: '🥦', name: 'Broccoli', points: 20, weight: 2, sub: 'Super Bonus +20!', detail: 'Extra vitamin-rich and rare — worth grabbing whenever it appears.' },
+
+          // 🟡 Neutral Foods (0 points)
+          { emoji: '🍚', name: 'Rice', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { emoji: '🫓', name: 'Chapati', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { emoji: '🍙', name: 'Idli', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { emoji: '🥞', name: 'Dosa', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { img: 'rolled-oats.png', emoji: '🥣', name: 'Oats', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { emoji: '🥔', name: 'Potato', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { emoji: '🌽', name: 'Corn', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { emoji: '🍝', name: 'Plain Pasta', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+
+          // 🔴 Trap Foods (-10 points)
+          { img: 'chips.png', emoji: '🍟', name: 'Chips', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Salty and processed — bad news for your teeth.' },
+          { img: 'soda.png', emoji: '🥤', name: 'Soft Drink', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Sugary and acidic — a double hit on enamel.' },
+          { emoji: '🍫', name: 'Chocolate', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Sugar feeds cavity-causing bacteria.' },
+          { img: 'candy.png', emoji: '🍬', name: 'Candy', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Pure sugar that clings to teeth.' },
+          { img: 'cupcake.png', emoji: '🍰', name: 'Cake', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Sugar and refined flour fuel plaque acid.' },
+          { emoji: '🍩', name: 'Doughnut', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Sticky and sugary — a cavity risk.' },
+          { img: 'burger.png', emoji: '🍔', name: 'Burger', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Refined bun and sauces add hidden sugar.' },
+          { emoji: '🍕', name: 'Pizza', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Processed toppings and refined crust aren’t tooth-friendly.' },
+          { emoji: '🍟', name: 'French Fries', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Starch breaks down into sugar that feeds plaque.' },
+          { emoji: '🍜', name: 'Instant Noodles', points: -10, weight: 4, tagline: 'Trap Food −10', detail: 'Highly processed with little nutritional value.' },
+        ]
+      },
+      {
+        id: 3,
+        shortName: 'Healthy vs Health Halo',
+        title: 'Level 3 · Healthy vs Health Halo',
+        subtitle: 'Some foods only look healthy — dodge the "health halo" traps and catch the real thing. Reach 80 points before time or teeth run out.',
+        targetScore: 80,
+        lives: 3,
+        timeLimit: 75,
+        spawnMs: 1600,
+        items: [
+          { img: 'rolled-oats.png', emoji: '🥣', name: 'Rolled Oats', points: 10, weight: 9, tagline: 'Really Healthy!', detail: 'Plain rolled oats are a slow-release, low-sugar way to start the day.' },
+          { img: 'coconut-water.png', emoji: '🥥', name: 'Coconut Water', points: 10, weight: 9, tagline: 'Really Healthy!', detail: 'Naturally hydrating with no added sugar, unlike many bottled drinks.' },
+          { img: 'buttermilk.png', emoji: '🥛', name: 'Buttermilk', points: 10, weight: 9, tagline: 'Really Healthy!', detail: 'Light, probiotic-rich, and free of added sugar.' },
+          { img: 'whole-bread.png', emoji: '🍞', name: 'Whole Bread', points: 10, weight: 9, tagline: 'Really Healthy!', detail: 'Keeps its fibre and nutrients without added sugar.' },
+          { img: 'plain-yogurt.png', emoji: '🥣', name: 'Plain Yogurt', points: 10, weight: 9, tagline: 'Really Healthy!', detail: 'Probiotics and calcium without added sugar.' },
+          { img: 'mixed-peanuts.png', emoji: '🥜', name: 'Mixed Peanuts', points: -10, weight: 8, tagline: 'Health Halo!', detail: 'Often fried in excess oil and heavily salted, making it high in unhealthy fats.' },
+          { img: 'fruit-juice.png', emoji: '🧃', name: 'Fruit Juice', points: -10, weight: 8, tagline: 'Health Halo!', detail: 'Looks healthy, but it’s often packed with as much sugar as soda, minus the fibre.' },
+          { img: 'flavoured-yogurt.png', emoji: '🍦', name: 'Flavoured Yogurt', points: -10, weight: 8, tagline: 'Health Halo!', detail: 'Flavoured yogurts can contain as much sugar as a dessert.' },
+          { img: 'corn-flakes.png', emoji: '🥣', name: 'Corn Flakes', points: -10, weight: 8, tagline: 'Health Halo!', detail: 'Marketed as healthy, but often heavily sweetened with added sugar.' },
+          { img: 'multigrain-biscuit.png', emoji: '🍪', name: 'Multigrain Biscuit', points: -10, weight: 8, tagline: 'Health Halo!', detail: '"Multigrain" doesn’t mean low sugar — these are often just sweet biscuits in disguise.' },
+          { img: 'granola-bar.png', emoji: '🍫', name: 'Granola Bar', points: -10, weight: 8, tagline: 'Health Halo!', detail: 'Often baked with syrup and sugar, turning it into a dessert-like snack.' },
+          { img: 'energy-drink.png', emoji: '⚡', name: 'Energy Drink', points: -10, weight: 8, tagline: 'Health Halo!', detail: 'High in sugar and acidity — a double hit on enamel despite the "energy" label.' },
+          { img: 'protein-bar.png', emoji: '🏋️', name: 'Protein Bar', points: -10, weight: 8, tagline: 'Health Halo!', detail: 'Many protein bars are coated in sugar syrup and chocolate, undoing the healthy image.' },
+        ]
+      },
+    ];
+
+    /* ════════════════════════════════════════════
+       SOUND EFFECTS (MP3 with Web Audio Fallback)
+    ════════════════════════════════════════════ */
+    const audioYes = new Audio('yes.mp3');
+    const audioNo = new Audio('wrong.mp3');
+    let audioCtx = null;
+
+    function initAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSynthBeep(freq, type, duration) {
+      try {
+        initAudioContext();
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) { }
+    }
+
+    function playCatchSound(pts) {
+      initAudioContext();
+      if (pts > 0) {
+        audioYes.currentTime = 0;
+        audioYes.play().catch(() => {
+          playSynthBeep(587.33, 'sine', 0.2); // D5 chime
+          setTimeout(() => playSynthBeep(880, 'sine', 0.25), 80); // A5 chime
+        });
+      } else if (pts < 0) {
+        audioNo.currentTime = 0;
+        audioNo.play().catch(() => {
+          playSynthBeep(180, 'sawtooth', 0.3); // Low buzz
+        });
+      } else {
+        playSynthBeep(440, 'triangle', 0.15);
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       STARS CANVAS
+    ════════════════════════════════════════════ */
+    const starsCanvas = document.getElementById('stars-canvas');
+    const ctx = starsCanvas.getContext('2d');
+    let stars = [];
+
+    function resizeStars() {
+      starsCanvas.width = window.innerWidth;
+      starsCanvas.height = window.innerHeight;
+      stars = [];
+      const count = Math.floor((window.innerWidth * window.innerHeight) / 3000);
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * starsCanvas.width,
+          y: Math.random() * starsCanvas.height,
+          r: Math.random() * 1.5 + 0.5,
+          alpha: Math.random(),
+          speed: Math.random() * 0.02 + 0.005
+        });
+      }
+    }
+    resizeStars();
+
+    function drawStars() {
+      ctx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+      stars.forEach(s => {
+        s.alpha += s.speed;
+        if (s.alpha > 1 || s.alpha < 0) s.speed = -s.speed;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
+        ctx.fill();
+      });
+    }
+
+    /* ════════════════════════════════════════════
+       GAME STATE & VARIABLES
+    ════════════════════════════════════════════ */
+    let currentLevelIdx = 0;
+    let currentLevel = LEVELS[0];
+    let score = 0;
+    let lives = 3;
+    let timeLeft = null;
+    let timerId = null;
+    let gameState = 'start'; // 'start', 'playing', 'over'
+    let unlockedLevels = [true, false, false];
+
+    let items = [];
+    let lastSpawn = 0;
+    let spawnMs = 2000;
+    let startTime = 0;
+    let raf = null;
+
+    let fairyX = window.innerWidth / 2;
+    let targetX = fairyX;
+    const CATCH_R = 60;
+
+    const gameArea = document.getElementById('game-area');
+    const fairyEl = document.getElementById('fairy');
+    let infoTimer = null;
+
+    function gameAreaH() { return gameArea.offsetHeight; }
+    function fairyYpos() { return gameAreaH() - 90; }
+
+    function moveFairy(x) {
+      const half = window.innerWidth <= 600 ? 34 : window.innerWidth <= 1023 ? 45 : 60;
+      fairyX = Math.max(half, Math.min(window.innerWidth - half, x));
+      fairyEl.style.left = fairyX + 'px';
+      fairyEl.style.top = fairyYpos() + 'px';
+    }
+
+    function updateSizeVars() {
+      // Intentionally kept for responsive handlers
+    }
+
+    /* ── Input ── */
+    window.addEventListener('mousemove', e => {
+      if (gameState === 'playing') targetX = e.clientX;
+    });
+    window.addEventListener('touchstart', e => {
+      initAudioContext();
+      if (gameState === 'playing') targetX = e.touches[0].clientX;
+    }, { passive: true });
+    window.addEventListener('touchmove', e => {
+      if (gameState === 'playing') { e.preventDefault(); targetX = e.touches[0].clientX; }
+    }, { passive: false });
+    window.addEventListener('keydown', e => {
+      initAudioContext();
+      if (gameState === 'playing') {
+        if (e.key === 'ArrowLeft' || e.key === 'a') targetX -= 40;
+        if (e.key === 'ArrowRight' || e.key === 'd') targetX += 40;
+      }
+    });
+
+    /* ── Resize ── */
+    window.addEventListener('resize', () => {
+      resizeStars();
+      updateSizeVars();
+      moveFairy(fairyX);
+    });
+
+    /* ════════════════════════════════════════════
+       LEVEL SELECT UI
+    ════════════════════════════════════════════ */
+    function renderLevelCards() {
+      const list = document.getElementById('level-list');
+      list.innerHTML = LEVELS.map((lvl, idx) => {
+        const locked = !unlockedLevels[idx];
+        const cleared = unlockedLevels[idx + 1] === true;
+        return `
+      <div class="level-card ${locked ? 'locked' : ''} ${cleared ? 'cleared' : ''}">
+        <div class="lc-info">
+          <div class="lc-num">Level ${lvl.id}</div>
+          <div class="lc-name">${lvl.shortName}</div>
+          <div class="lc-obj">${lvl.subtitle}</div>
+          ${cleared ? '<div class="lc-check">✅ Cleared</div>' : ''}
+        </div>
+        <button class="btn small" ${locked ? 'disabled' : ''} onclick="startLevel(${idx})">
+          ${locked ? '🔒' : 'Play ▶'}
+        </button>
+      </div>`;
+      }).join('');
+    }
+
+    function goToLevelSelect() {
+      document.getElementById('gameover-screen').style.display = 'none';
+      document.getElementById('levelclear-screen').style.display = 'none';
+      gameState = 'start';
+      renderLevelCards();
+      document.getElementById('start-screen').style.display = 'flex';
+      idleLoop();
+    }
+
+    /* ════════════════════════════════════════════
+       SPAWN
+    ════════════════════════════════════════════ */
+    function pickWeighted(pool) {
+      const total = pool.reduce((s, it) => s + it.weight, 0);
+      let r = Math.random() * total;
+      for (const it of pool) {
+        if (r < it.weight) return it;
+        r -= it.weight;
+      }
+      return pool[pool.length - 1];
+    }
+
+    function spawnFood() {
+      const data = pickWeighted(currentLevel.items);
+
+      const margin = 70;
+      const x = margin + Math.random() * (window.innerWidth - margin * 2);
+      const elapsed = (Date.now() - startTime) / 1000;
+      const speed = 1.5 + elapsed * 0.02 + Math.random() * 0.9;
+
+      const el = document.createElement('div');
+      el.className = 'food-item';
+      el.style.left = x + 'px';
+      el.style.top = '-100px';
+
+      if (data.img) {
+        el.innerHTML = `<img src="${data.img}" alt="${data.name}" onerror="handleImgError(this, '${data.emoji || '🍎'}')"><span class="food-label">${data.name}</span>`;
+      } else {
+        el.innerHTML = `<span class="food-emoji-el">${data.emoji || '🍎'}</span><span class="food-label">${data.name}</span>`;
+      }
+      gameArea.appendChild(el);
+
+      items.push({ el, x, y: -100, speed, data, caught: false });
+    }
+
+    /* ════════════════════════════════════════════
+       EFFECTS
+    ════════════════════════════════════════════ */
+    function showBurst(x, y, text, cls) {
+      const b = document.createElement('div');
+      b.className = `burst ${cls}`;
+      b.textContent = text;
+      b.style.left = x + 'px';
+      b.style.top = y + 'px';
+      gameArea.appendChild(b);
+      setTimeout(() => b.remove(), 950);
+    }
+
+    function showSparkles(x, y) {
+      ['✨', '⭐', '💫', '🌟'].forEach((ch, i) => {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.textContent = ch;
+        s.style.left = (x + (Math.random() - 0.5) * 90) + 'px';
+        s.style.top = (y + (Math.random() - 0.5) * 50) + 'px';
+        s.style.animationDelay = (i * 65) + 'ms';
+        gameArea.appendChild(s);
+        setTimeout(() => s.remove(), 800);
+      });
+    }
+
+    function flashRed() {
+      const f = document.getElementById('red-flash');
+      f.classList.add('show');
+      setTimeout(() => f.classList.remove('show'), 280);
+    }
+
+    /* ════════════════════════════════════════════
+       INFO CARD
+    ════════════════════════════════════════════ */
+    function cardMeta(points) {
+      if (points > 0) return { cls: 'good', label: '✅ Good catch!' };
+      if (points < 0) return { cls: 'bad', label: '❌ Bad catch!' };
+      return { cls: 'neutral', label: '🟡 Neutral catch' };
+    }
+
+    function showCard(data) {
+      clearCard();
+      const c = document.createElement('div');
+      c.id = 'info-card';
+      const meta = cardMeta(data.points);
+      const ptsText = data.points > 0 ? `+${data.points} pts` : `${data.points} pts`;
+      const headline = data.sub ? `${data.sub} — ${data.tagline}` : data.tagline;
+      const imgHtml = data.img ? `<img class="ci" src="${data.img}" alt="${data.name}" onerror="handleImgError(this, '${data.emoji || '🍎'}')">` : `<div class="ci">${data.emoji || '🍎'}</div>`;
+
+      c.innerHTML = `
+        ${imgHtml}
+        <div class="cn">${data.name}</div>
+        <div class="ct ${meta.cls}">${meta.label} (${ptsText})</div>
+        <div class="cd"><strong>${headline}</strong><br>${data.detail}</div>`;
+      document.body.appendChild(c);
+      clearTimeout(infoTimer);
+      infoTimer = setTimeout(clearCard, 4200);
+    }
+
+    function clearCard() {
+      const c = document.getElementById('info-card');
+      if (c) c.remove();
+    }
+
+    /* ════════════════════════════════════════════
+       HUD
+    ════════════════════════════════════════════ */
+    function updateHealth() {
+      for (let i = 1; i <= 3; i++) {
+        const el = document.getElementById('h' + i);
+        if (currentLevel.lives === null) {
+          el.style.display = 'none';
+        } else {
+          el.style.display = '';
+          el.classList.toggle('lost', i > lives);
+        }
+      }
+    }
+
+    function updateScoreDisplay() {
+      document.getElementById('score-val').textContent = score;
+      document.getElementById('target-text').textContent = ` / ${currentLevel.targetScore}`;
+    }
+
+    function updateTimerDisplay() {
+      const wrap = document.getElementById('timer-wrap');
+      if (currentLevel.timeLimit === null) {
+        wrap.style.display = 'none';
+        return;
+      }
+      wrap.style.display = '';
+      document.getElementById('timer-val').textContent = Math.max(0, timeLeft);
+      wrap.classList.toggle('low', timeLeft <= 10);
+    }
+
+    function updateHUDForLevel() {
+      document.getElementById('hud-title').textContent = `🧚 ${currentLevel.shortName}`;
+      updateScoreDisplay();
+      updateTimerDisplay();
+      updateHealth();
+    }
+
+    /* ════════════════════════════════════════════
+       MAIN LOOP
+    ════════════════════════════════════════════ */
+    function loop(ts) {
+      if (gameState !== 'playing') return;
+      drawStars();
+
+      fairyX += (targetX - fairyX) * 0.15;
+      moveFairy(fairyX);
+
+      if (ts - lastSpawn > spawnMs) {
+        spawnFood();
+        lastSpawn = ts;
+        spawnMs = Math.max(700, spawnMs - 8);
+      }
+
+      const fy = fairyYpos();
+
+      for (let i = items.length - 1; i >= 0; i--) {
+        const it = items[i];
+        if (it.caught) continue;
+
+        it.y += it.speed;
+        it.el.style.top = it.y + 'px';
+
+        if (Math.abs(it.x - fairyX) < CATCH_R && Math.abs(it.y - fy) < CATCH_R) {
+          it.caught = true;
+          it.el.remove();
+          items.splice(i, 1);
+
+          const data = it.data;
+          showCard(data);
+          playCatchSound(data.points);
+          score = Math.max(0, score + data.points);
+          updateScoreDisplay();
+
+          if (data.points > 0) {
+            showBurst(it.x, fy - 50, `+${data.points} ⭐`, 'good');
+            showSparkles(it.x, fy);
+          } else if (data.points < 0) {
+            showBurst(it.x, fy - 50, `${data.points} pts`, 'bad');
+            flashRed();
+            if (currentLevel.lives !== null) {
+              lives--;
+              updateHealth();
+              if (lives <= 0) { setTimeout(() => endLevel(false), 600); return; }
+            }
+          } else {
+            showBurst(it.x, fy - 50, '0 pts', 'neutral');
+          }
+
+          if (score >= currentLevel.targetScore) {
+            setTimeout(() => endLevel(true), 400);
+            return;
+          }
+          continue;
+        }
+
+        if (it.y > gameAreaH() + 80) {
+          it.el.remove();
+          items.splice(i, 1);
+        }
+      }
+
+      raf = requestAnimationFrame(loop);
+    }
+
+    /* ════════════════════════════════════════════
+       GAME CONTROL
+    ════════════════════════════════════════════ */
+    function startLevel(idx) {
+      if (!unlockedLevels[idx]) return;
+      initAudioContext();
+      currentLevelIdx = idx;
+      currentLevel = LEVELS[idx];
+
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('levelclear-screen').style.display = 'none';
+      document.getElementById('gameover-screen').style.display = 'none';
+
+      gameState = 'playing';
+      score = 0;
+      lives = currentLevel.lives === null ? null : currentLevel.lives;
+      timeLeft = currentLevel.timeLimit;
+      items.forEach(it => it.el.remove());
+      items = [];
+      lastSpawn = 0;
+      spawnMs = currentLevel.spawnMs;
+      startTime = Date.now();
+
+      updateHUDForLevel();
+
+      fairyX = window.innerWidth / 2;
+      targetX = fairyX;
+      moveFairy(fairyX);
+
+      if (timerId) clearInterval(timerId);
+      if (currentLevel.timeLimit !== null) {
+        timerId = setInterval(() => {
+          if (gameState !== 'playing') return;
+          timeLeft--;
+          updateTimerDisplay();
+          if (timeLeft <= 0) {
+            clearInterval(timerId);
+            if (score < currentLevel.targetScore) endLevel(false);
+          }
+        }, 1000);
+      }
+
+      raf = requestAnimationFrame(loop);
+    }
+
+    function endLevel(won) {
+      gameState = 'over';
+      cancelAnimationFrame(raf);
+      if (timerId) clearInterval(timerId);
+      items.forEach(it => it.el.remove());
+      items = [];
+      clearCard();
+
+      if (won) {
+        if (currentLevelIdx + 1 < LEVELS.length) unlockedLevels[currentLevelIdx + 1] = true;
+        document.getElementById('lc-title').textContent = `${currentLevel.shortName} Complete!`;
+        document.getElementById('lc-score').textContent = score;
+        const hasNext = currentLevelIdx + 1 < LEVELS.length;
+        document.getElementById('lc-next-btn').style.display = hasNext ? 'inline-block' : 'none';
+        document.getElementById('levelclear-screen').style.display = 'flex';
+      } else {
+        document.getElementById('gameover-title').textContent = 'Level Failed!';
+        document.getElementById('gameover-msg').textContent =
+          currentLevel.lives !== null && lives <= 0
+            ? 'All your teeth are gone! Try again.'
+            : "Time's up! You didn't reach the target score.";
+        document.getElementById('final-score').textContent = score;
+        document.getElementById('gameover-screen').style.display = 'flex';
+      }
+      idleLoop();
+    }
+
+    function nextLevel() {
+      startLevel(currentLevelIdx + 1);
+    }
+    function retryLevel() {
+      startLevel(currentLevelIdx);
+    }
+
+    /* ════════════════════════════════════════════
+       IDLE STAR LOOP (menus / end screens)
+    ════════════════════════════════════════════ */
+    function idleLoop() {
+      if (gameState === 'playing') return;
+      drawStars();
+      requestAnimationFrame(idleLoop);
+    }
+
+    renderLevelCards();
+    idleLoop();
+  </script>
+</body>
+
+</html>

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tooth Fairy Food Catcher 🧚</title>
+  <title>NUTRI RUSH 🧚</title>
   <style>
     *,
     *::before,
@@ -524,6 +524,468 @@
     }
 
     /* ══════════════════════════════════════
+       TEETH BACKGROUND & FLOATING PARTICLES
+    ══════════════════════════════════════ */
+    .teeth-bg-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .floating-tooth-bg {
+      position: absolute;
+      font-size: clamp(24px, 4.5vw, 46px);
+      opacity: 0.16;
+      filter: drop-shadow(0 0 12px rgba(199, 125, 255, 0.4));
+      animation: floatTooth 8s ease-in-out infinite alternate;
+      user-select: none;
+    }
+
+    @keyframes floatTooth {
+      0% { transform: translateY(0px) rotate(0deg) scale(1); }
+      50% { transform: translateY(-22px) rotate(12deg) scale(1.1); }
+      100% { transform: translateY(16px) rotate(-10deg) scale(0.92); }
+    }
+
+    /* ══════════════════════════════════════
+       COLOURFUL AMBIENT LIGHTS
+    ══════════════════════════════════════ */
+    .colourful-lights-container {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .light-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      opacity: 0.65;
+      animation: floatLight 9s ease-in-out infinite alternate;
+    }
+
+    .light-orb.orb-cyan {
+      width: clamp(260px, 35vw, 460px);
+      height: clamp(260px, 35vw, 460px);
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.75) 0%, rgba(79, 172, 254, 0.25) 70%, transparent 100%);
+      top: -8%;
+      left: -8%;
+      animation-delay: 0s;
+    }
+
+    .light-orb.orb-magenta {
+      width: clamp(280px, 38vw, 480px);
+      height: clamp(280px, 38vw, 480px);
+      background: radial-gradient(circle, rgba(255, 0, 128, 0.7) 0%, rgba(121, 40, 202, 0.25) 70%, transparent 100%);
+      bottom: -12%;
+      right: -8%;
+      animation-delay: 2.5s;
+    }
+
+    .light-orb.orb-gold {
+      width: clamp(230px, 30vw, 380px);
+      height: clamp(230px, 30vw, 380px);
+      background: radial-gradient(circle, rgba(255, 150, 0, 0.65) 0%, rgba(255, 0, 128, 0.2) 70%, transparent 100%);
+      top: 38%;
+      right: 12%;
+      animation-delay: 1.2s;
+    }
+
+    .light-orb.orb-violet {
+      width: clamp(240px, 32vw, 400px);
+      height: clamp(240px, 32vw, 400px);
+      background: radial-gradient(circle, rgba(157, 78, 221, 0.75) 0%, rgba(114, 9, 183, 0.25) 70%, transparent 100%);
+      bottom: 18%;
+      left: 8%;
+      animation-delay: 4s;
+    }
+
+    @keyframes floatLight {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(30px, -25px) scale(1.15); }
+      100% { transform: translate(-20px, 20px) scale(0.92); }
+    }
+
+    /* ══════════════════════════════════════
+       DYNAMIC SWIRL STRUCTURE (3rd Screen)
+    ══════════════════════════════════════ */
+    .swirl-container {
+      position: absolute;
+      inset: -80px;
+      pointer-events: none;
+      z-index: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .swirl-ring {
+      width: clamp(380px, 75vw, 750px);
+      height: clamp(380px, 75vw, 750px);
+      border-radius: 50%;
+      border: 3.5px dashed rgba(0, 242, 254, 0.75);
+      box-shadow: 0 0 55px rgba(0, 242, 254, 0.45), inset 0 0 55px rgba(0, 242, 254, 0.45);
+      animation: rotateSwirl 20s linear infinite;
+      transition: border-color 0.6s ease, box-shadow 0.6s ease;
+    }
+
+    .swirl-ring-2 {
+      position: absolute;
+      width: clamp(480px, 88vw, 880px);
+      height: clamp(480px, 88vw, 880px);
+      border-radius: 50%;
+      border: 2.5px dotted rgba(255, 0, 128, 0.65);
+      box-shadow: 0 0 65px rgba(255, 0, 128, 0.3);
+      animation: rotateSwirlReverse 26s linear infinite;
+      transition: border-color 0.6s ease, box-shadow 0.6s ease;
+    }
+
+    @keyframes rotateSwirl {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.04); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    @keyframes rotateSwirlReverse {
+      0% { transform: rotate(360deg) scale(1.02); }
+      50% { transform: rotate(180deg) scale(0.96); }
+      100% { transform: rotate(0deg) scale(1.02); }
+    }
+
+    /* ══════════════════════════════════════
+       TEETH INFO MODAL ("HI, I'M YOUR TEETH")
+    ══════════════════════════════════════ */
+    #teeth-info-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(6, 0, 20, 0.85);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    #teeth-info-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .teeth-modal-card {
+      width: min(520px, 92vw);
+      background: linear-gradient(135deg, rgba(30, 8, 60, 0.96), rgba(10, 24, 62, 0.96));
+      border: 2px solid rgba(240, 208, 255, 0.42);
+      border-radius: 28px;
+      padding: 28px 24px;
+      text-align: left;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 50px rgba(199, 125, 255, 0.35);
+      transform: scale(0.88) translateY(25px);
+      transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #teeth-info-modal.active .teeth-modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .teeth-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .teeth-modal-avatar {
+      font-size: 50px;
+      filter: drop-shadow(0 0 15px rgba(240, 208, 255, 0.9));
+      animation: floatTooth 3s ease-in-out infinite alternate;
+    }
+
+    .teeth-modal-title h2 {
+      font-size: 22px;
+      font-weight: 900;
+      color: #ffffff;
+      margin: 0;
+      letter-spacing: 0.5px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .teeth-modal-title p {
+      font-size: 13px;
+      color: #00f2fe;
+      margin-top: 3px;
+      font-weight: 700;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .teeth-purpose-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .purpose-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 11px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .purpose-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .purpose-text {
+      font-size: 13px;
+      color: #e6e0f8;
+      line-height: 1.45;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .purpose-text strong {
+      color: #7aff7a;
+      display: block;
+      margin-bottom: 2px;
+      font-size: 13.5px;
+    }
+
+    .teeth-modal-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #00f2fe, #4facfe);
+      color: #002244;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 22px rgba(0, 242, 254, 0.45);
+      transition: transform 0.15s, box-shadow 0.15s;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .teeth-modal-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 30px rgba(0, 242, 254, 0.65);
+    }
+
+    .hospital-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      background: rgba(0, 242, 254, 0.14);
+      border: 1px solid rgba(0, 242, 254, 0.35);
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #80f9ff;
+      margin-top: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ══════════════════════════════════════
+       INTRO TRANSITION SEQUENCE (1st & 2nd)
+    ══════════════════════════════════════ */
+    #intro-screen {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #070014 0%, #1a0033 50%, #03000f 100%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .intro-card {
+      position: absolute;
+      width: min(580px, 90vw);
+      padding: 42px 32px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1.5px solid rgba(240, 208, 255, 0.32);
+      border-radius: 28px;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), inset 0 0 35px rgba(199, 125, 255, 0.22);
+      opacity: 0;
+      transform: translateY(25px) scale(0.94);
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .intro-card.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .intro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      background: rgba(199, 125, 255, 0.18);
+      border: 1px solid rgba(199, 125, 255, 0.35);
+      border-radius: 30px;
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #e0aaff;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .intro-title {
+      font-size: clamp(20px, 3.8vw, 30px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffffff 0%, #f0d0ff 50%, #c77dff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.35;
+      margin-bottom: 16px;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .intro-tooth-icon {
+      font-size: 44px;
+      filter: drop-shadow(0 0 15px rgba(199, 125, 255, 0.8));
+      animation: floatTooth 4s ease-in-out infinite alternate;
+    }
+
+    .skip-btn {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      padding: 8px 20px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 30px;
+      color: #eee;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 1001;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .skip-btn:hover {
+      background: rgba(255, 255, 255, 0.28);
+      color: #fff;
+      transform: scale(1.06);
+    }
+
+    /* ══════════════════════════════════════
+       RULES & REGULATIONS BOX
+    ══════════════════════════════════════ */
+    .rules-card {
+      position: relative;
+      z-index: 2;
+      width: min(520px, 92vw);
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1.5px solid rgba(240, 208, 255, 0.22);
+      border-radius: 24px;
+      padding: 20px 24px;
+      margin: 12px 0 20px;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45), inset 0 0 25px rgba(199, 125, 255, 0.12);
+      text-align: left;
+    }
+
+    .rules-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .smiling-tooth-icon {
+      font-size: 34px;
+      filter: drop-shadow(0 0 10px rgba(199, 125, 255, 0.85));
+      animation: toothSmilePulse 2.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes toothSmilePulse {
+      0% { transform: scale(1) rotate(-4deg); }
+      100% { transform: scale(1.12) rotate(4deg); }
+    }
+
+    .rules-header-text h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: #f0d0ff;
+      letter-spacing: 0.5px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .rules-header-text p {
+      font-size: 12px;
+      color: #c7a4ff;
+      margin-top: 2px;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .rules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: #e4d7f5;
+      line-height: 1.45;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    .rule-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Start Button Motion ── */
+    .btn-start-motion {
+      position: relative;
+      z-index: 2;
+      animation: startBtnPulse 2.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes startBtnPulse {
+      0% { box-shadow: 0 5px 24px rgba(140, 0, 255, 0.5); transform: scale(1); }
+      100% { box-shadow: 0 10px 40px rgba(199, 125, 255, 0.9); transform: scale(1.04); }
+    }
+
+    /* ══════════════════════════════════════
      MOBILE ≤ 600px
   ══════════════════════════════════════ */
     @media (max-width: 600px) {
@@ -747,7 +1209,7 @@
 
   <!-- HUD -->
   <div id="hud">
-    <div class="title" id="hud-title">🧚 Tooth Fairy</div>
+    <div class="title" id="hud-title">🧚 NUTRI RUSH</div>
     <div id="hud-center">
       <div id="score-wrap">⭐ <span id="score-val">0</span><span id="target-text"></span></div>
       <div id="timer-wrap" style="display:none">⏱ <span id="timer-val">--</span>s</div>
@@ -766,24 +1228,163 @@
     </div>
   </div>
 
-  <!-- START / LEVEL SELECT SCREEN -->
-  <div id="start-screen" class="screen">
+  <!-- TEETH INFO MODAL ("HI, I'M YOUR TEETH") -->
+  <div id="teeth-info-modal" onclick="closeTeethModalOnBackdrop(event)">
+    <div class="teeth-modal-card">
+      <div class="teeth-modal-header">
+        <div class="teeth-modal-avatar">🦷😁</div>
+        <div class="teeth-modal-title">
+          <h2>HI, I'M YOUR TEETH!</h2>
+          <p>Discover Why I Am So Important To You ✨</p>
+        </div>
+      </div>
+      <div class="teeth-purpose-list">
+        <div class="purpose-item">
+          <div class="purpose-icon">🍎</div>
+          <div class="purpose-text">
+            <strong>1. Chewing & Digestion</strong>
+            I chew and break down food into small, digestible pieces so your body can absorb essential nutrients and vitamins.
+          </div>
+        </div>
+        <div class="purpose-item">
+          <div class="purpose-icon">🗣️</div>
+          <div class="purpose-text">
+            <strong>2. Speech & Clear Communication</strong>
+            I work with your tongue and lips to help you pronounce words clearly and speak with confidence!
+          </div>
+        </div>
+        <div class="purpose-item">
+          <div class="purpose-icon">😁</div>
+          <div class="purpose-text">
+            <strong>3. Facial Structure & Beautiful Smile</strong>
+            I support your jawline, maintain your face shape, and help you share bright, healthy smiles with everyone.
+          </div>
+        </div>
+        <div class="purpose-item">
+          <div class="purpose-icon">🛡️</div>
+          <div class="purpose-text">
+            <strong>4. Protection & Oral Hygiene</strong>
+            Strong tooth enamel forms a natural shield to protect your gums and prevent harmful decay.
+          </div>
+        </div>
+      </div>
+      <button class="teeth-modal-btn" onclick="closeTeethModal()">Got it! Protect My Teeth 🦷✨</button>
+    </div>
+  </div>
+
+  <!-- INTRO TRANSITION SCREEN (1st & 2nd Screens) -->
+  <div id="intro-screen">
+    <button class="skip-btn" onclick="skipIntro()">Skip Intro ⏩</button>
+
+    <!-- Colourful Ambient Lights -->
+    <div class="colourful-lights-container">
+      <div class="light-orb orb-cyan"></div>
+      <div class="light-orb orb-magenta"></div>
+      <div class="light-orb orb-gold"></div>
+      <div class="light-orb orb-violet"></div>
+    </div>
+
+    <!-- Aesthetic Teeth Background Particles -->
+    <div class="teeth-bg-container">
+      <div class="floating-tooth-bg" style="top: 8%; left: 8%; animation-delay: 0s;">🦷</div>
+      <div class="floating-tooth-bg" style="top: 14%; right: 12%; animation-delay: 1.5s;">🦷</div>
+      <div class="floating-tooth-bg" style="bottom: 18%; left: 14%; animation-delay: 3s;">🦷</div>
+      <div class="floating-tooth-bg" style="bottom: 10%; right: 10%; animation-delay: 4.5s;">🦷</div>
+      <div class="floating-tooth-bg" style="top: 42%; left: 5%; animation-delay: 2s;">🦷</div>
+      <div class="floating-tooth-bg" style="top: 48%; right: 6%; animation-delay: 3.5s;">🦷</div>
+      <div class="floating-tooth-bg" style="top: 80%; left: 45%; animation-delay: 1s;">🦷</div>
+    </div>
+
+    <!-- 1st Screen Card -->
+    <div id="intro-card-1" class="intro-card active">
+      <div class="intro-badge">🏛️ Institutional Partner</div>
+      <h2 class="intro-title">CHETTINAD DENTAL COLLEGE AND RESEARCH INSTITUTE</h2>
+      <div class="intro-tooth-icon">🦷✨</div>
+      <div class="hospital-badge">🏥 Dental Hospital & Medical Research Campus</div>
+    </div>
+
+    <!-- 2nd Screen Card -->
+    <div id="intro-card-2" class="intro-card">
+      <div class="intro-badge">🏥 Presented By</div>
+      <h2 class="intro-title">DEPARTMENT OF PUBLIC HEALTH DENTISTRY</h2>
+      <div class="intro-tooth-icon">🪥✨</div>
+      <div class="hospital-badge">🛡️ Community Dental Health & Prevention Unit</div>
+    </div>
+  </div>
+
+  <!-- START SCREEN (3rd Screen: Game Interface) -->
+  <div id="start-screen" class="screen" onclick="onScreen3Click(event)">
+    <!-- Swirl-like Structure (Changes Color on User Touch) -->
+    <div class="swirl-container">
+      <div id="swirl-ring-1" class="swirl-ring"></div>
+      <div id="swirl-ring-2" class="swirl-ring-2"></div>
+    </div>
+
+    <!-- Colourful Ambient Lights -->
+    <div class="colourful-lights-container">
+      <div class="light-orb orb-cyan"></div>
+      <div class="light-orb orb-magenta"></div>
+      <div class="light-orb orb-gold"></div>
+      <div class="light-orb orb-violet"></div>
+    </div>
+
+    <!-- Aesthetic Teeth Background -->
+    <div class="teeth-bg-container">
+      <div class="floating-tooth-bg" style="top: 6%; left: 8%; animation-delay: 0s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="top: 12%; right: 10%; animation-delay: 2s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="bottom: 16%; left: 10%; animation-delay: 4s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="bottom: 8%; right: 6%; animation-delay: 1s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="top: 40%; left: 3%; animation-delay: 3s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="top: 46%; right: 4%; animation-delay: 2.5s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+    </div>
+
     <div class="big-emoji">🧚‍♀️</div>
-    <h1>Tooth Fairy<br>Food Catcher</h1>
-    <p>Choose a level to begin!</p>
-    <div id="level-list"></div>
+    <h1>NUTRI RUSH</h1>
+    <p>Catch healthy foods & protect your smile!</p>
+    <div class="hospital-badge" style="margin-bottom: 10px;">🏥 Chettinad Dental Hospital Public Health Initiative</div>
+
+    <!-- Rules & Regulations Aesthetic Box with Smiling Tooth -->
+    <div class="rules-card">
+      <div class="rules-header">
+        <div class="smiling-tooth-icon" style="cursor: pointer;" onclick="openTeethModal(event)" title="Touch me to learn about your teeth!">🦷😁</div>
+        <div class="rules-header-text">
+          <h3>Rules & Regulations</h3>
+          <p>Touch the smiling tooth to learn your teeth's purpose! 💡</p>
+        </div>
+      </div>
+      <div class="rules-list">
+        <div class="rule-item">
+          <span class="rule-icon">🥜</span>
+          <div><strong>1. Catch Healthy Foods:</strong> Catch peanuts 🥜, eggs 🥚, broccoli 🥦, spinach 🥬, milk 🥛, oats 🥣, idli 🥟 & dosa 🥞 to score points.</div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-icon">🍬</span>
+          <div><strong>2. Dodge Junk & Traps:</strong> Avoid candies 🍬, sodas 🥤, chips 🍟, fried foods 🍗 & cigarettes 🚬 to save your score and teeth.</div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-icon">🦷</span>
+          <div><strong>3. Protect Your Tooth Lives:</strong> Don't lose all 3 tooth lives or let the countdown timer reach zero.</div>
+        </div>
+        <div class="rule-item">
+          <span class="rule-icon">🏆</span>
+          <div><strong>4. Master All 3 Levels:</strong> Beat Level 1, Level 2, and Level 3 to win the ultimate Nutri Rush trophy!</div>
+        </div>
+      </div>
+    </div>
+
+    <button id="start-now-btn" class="btn btn-start-motion" onclick="onStartNowPress()">Start Game ▶</button>
   </div>
 
   <!-- LEVEL CLEAR SCREEN -->
   <div id="levelclear-screen" class="screen" style="display:none">
-    <div class="big-emoji">🎉</div>
+    <div class="big-emoji" id="lc-emoji">🎉</div>
     <h1 id="lc-title">Level Complete!</h1>
-    <p>Nice catching! Here's your score:</p>
+    <p id="lc-msg">Nice catching! Here's your score:</p>
     <div class="final-score" id="lc-score">0</div>
     <div class="score-label">Score</div>
     <div>
       <button class="btn" id="lc-next-btn" onclick="nextLevel()">Next Level ➡️</button>
-      <button class="btn secondary" onclick="goToLevelSelect()">Level Select</button>
+      <button class="btn" id="lc-playagain-btn" style="display:none" onclick="startLevel(0)">Play Again 🔁</button>
     </div>
   </div>
 
@@ -791,12 +1392,11 @@
   <div id="gameover-screen" class="screen" style="display:none">
     <div class="big-emoji">💔</div>
     <h1 id="gameover-title">Level Failed!</h1>
-    <p id="gameover-msg">Give it another shot!</p>
+    <p id="gameover-msg">Restarting from Level 1...</p>
     <div class="final-score" id="final-score">0</div>
     <div class="score-label">Final Score</div>
     <div>
-      <button class="btn" onclick="retryLevel()">Try Again 🔁</button>
-      <button class="btn secondary" onclick="goToLevelSelect()">Level Select</button>
+      <button class="btn" onclick="retryLevel()">Restart Level 1 🔁</button>
     </div>
   </div>
 
@@ -911,8 +1511,8 @@
           // 🟡 Neutral Foods (0 points)
           { emoji: '🍚', name: 'Rice', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
           { emoji: '🫓', name: 'Chapati', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
-          { emoji: '🍙', name: 'Idli', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
-          { emoji: '🥞', name: 'Dosa', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { img: 'idli.png', emoji: '🍙', name: 'Idli', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
+          { img: 'dosa.png', emoji: '🥞', name: 'Dosa', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
           { img: 'rolled-oats.png', emoji: '🥣', name: 'Oats', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
           { emoji: '🥔', name: 'Potato', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
           { emoji: '🌽', name: 'Corn', points: 0, weight: 5, tagline: 'Neutral Food', detail: 'A healthy staple, but not especially vitamin-rich. Worth 0 points.' },
@@ -1112,37 +1712,7 @@
       moveFairy(fairyX);
     });
 
-    /* ════════════════════════════════════════════
-       LEVEL SELECT UI
-    ════════════════════════════════════════════ */
-    function renderLevelCards() {
-      const list = document.getElementById('level-list');
-      list.innerHTML = LEVELS.map((lvl, idx) => {
-        const locked = !unlockedLevels[idx];
-        const cleared = unlockedLevels[idx + 1] === true;
-        return `
-      <div class="level-card ${locked ? 'locked' : ''} ${cleared ? 'cleared' : ''}">
-        <div class="lc-info">
-          <div class="lc-num">Level ${lvl.id}</div>
-          <div class="lc-name">${lvl.shortName}</div>
-          <div class="lc-obj">${lvl.subtitle}</div>
-          ${cleared ? '<div class="lc-check">✅ Cleared</div>' : ''}
-        </div>
-        <button class="btn small" ${locked ? 'disabled' : ''} onclick="startLevel(${idx})">
-          ${locked ? '🔒' : 'Play ▶'}
-        </button>
-      </div>`;
-      }).join('');
-    }
 
-    function goToLevelSelect() {
-      document.getElementById('gameover-screen').style.display = 'none';
-      document.getElementById('levelclear-screen').style.display = 'none';
-      gameState = 'start';
-      renderLevelCards();
-      document.getElementById('start-screen').style.display = 'flex';
-      idleLoop();
-    }
 
     /* ════════════════════════════════════════════
        SPAWN
@@ -1163,7 +1733,8 @@
       const margin = 70;
       const x = margin + Math.random() * (window.innerWidth - margin * 2);
       const elapsed = (Date.now() - startTime) / 1000;
-      const speed = 1.5 + elapsed * 0.02 + Math.random() * 0.9;
+      const base = currentLevel.baseSpeed || 2.0;
+      const speed = base + elapsed * 0.03 + Math.random() * 0.8;
 
       const el = document.createElement('div');
       el.className = 'food-item';
@@ -1354,7 +1925,7 @@
        GAME CONTROL
     ════════════════════════════════════════════ */
     function startLevel(idx) {
-      if (!unlockedLevels[idx]) return;
+      if (idx >= LEVELS.length) idx = 0;
       initAudioContext();
       currentLevelIdx = idx;
       currentLevel = LEVELS[idx];
@@ -1405,17 +1976,30 @@
 
       if (won) {
         if (currentLevelIdx + 1 < LEVELS.length) unlockedLevels[currentLevelIdx + 1] = true;
-        document.getElementById('lc-title').textContent = `${currentLevel.shortName} Complete!`;
-        document.getElementById('lc-score').textContent = score;
         const hasNext = currentLevelIdx + 1 < LEVELS.length;
-        document.getElementById('lc-next-btn').style.display = hasNext ? 'inline-block' : 'none';
+
+        if (hasNext) {
+          document.getElementById('lc-emoji').textContent = '🎉';
+          document.getElementById('lc-title').textContent = `${currentLevel.shortName} Complete!`;
+          document.getElementById('lc-msg').textContent = "Nice catching! Here's your score:";
+          document.getElementById('lc-next-btn').style.display = 'inline-block';
+          document.getElementById('lc-playagain-btn').style.display = 'none';
+        } else {
+          document.getElementById('lc-emoji').textContent = '🏆';
+          document.getElementById('lc-title').textContent = 'Game Complete!';
+          document.getElementById('lc-msg').textContent = 'Congratulations! You beat all 3 levels!';
+          document.getElementById('lc-next-btn').style.display = 'none';
+          document.getElementById('lc-playagain-btn').style.display = 'inline-block';
+        }
+
+        document.getElementById('lc-score').textContent = score;
         document.getElementById('levelclear-screen').style.display = 'flex';
       } else {
         document.getElementById('gameover-title').textContent = 'Level Failed!';
         document.getElementById('gameover-msg').textContent =
           currentLevel.lives !== null && lives <= 0
-            ? 'All your teeth are gone! Try again.'
-            : "Time's up! You didn't reach the target score.";
+            ? 'All your teeth are gone! You must restart from Level 1.'
+            : "Time's up! You must restart from Level 1.";
         document.getElementById('final-score').textContent = score;
         document.getElementById('gameover-screen').style.display = 'flex';
       }
@@ -1426,7 +2010,133 @@
       startLevel(currentLevelIdx + 1);
     }
     function retryLevel() {
-      startLevel(currentLevelIdx);
+      startLevel(0); // Always restart from Level 1 on failure
+    }
+
+    /* ════════════════════════════════════════════
+       DYNAMIC SWIRL COLOR CYCLING & TEETH MODAL
+    ════════════════════════════════════════════ */
+    const SWIRL_PALETTES = [
+      { border1: 'rgba(0, 242, 254, 0.85)', shadow1: 'rgba(0, 242, 254, 0.45)', border2: 'rgba(255, 0, 128, 0.75)', shadow2: 'rgba(255, 0, 128, 0.35)' },
+      { border1: 'rgba(255, 0, 128, 0.88)', shadow1: 'rgba(255, 0, 128, 0.55)', border2: 'rgba(121, 40, 202, 0.75)', shadow2: 'rgba(121, 40, 202, 0.4)' },
+      { border1: 'rgba(0, 230, 118, 0.88)', shadow1: 'rgba(0, 230, 118, 0.55)', border2: 'rgba(0, 242, 254, 0.75)', shadow2: 'rgba(0, 242, 254, 0.4)' },
+      { border1: 'rgba(255, 150, 0, 0.88)', shadow1: 'rgba(255, 150, 0, 0.55)', border2: 'rgba(255, 0, 128, 0.75)', shadow2: 'rgba(255, 0, 128, 0.4)' },
+      { border1: 'rgba(157, 78, 221, 0.88)', shadow1: 'rgba(157, 78, 221, 0.55)', border2: 'rgba(0, 242, 254, 0.75)', shadow2: 'rgba(0, 242, 254, 0.4)' },
+      { border1: 'rgba(255, 221, 0, 0.88)', shadow1: 'rgba(255, 221, 0, 0.55)', border2: 'rgba(0, 230, 118, 0.75)', shadow2: 'rgba(0, 230, 118, 0.4)' }
+    ];
+    let swirlPaletteIdx = 0;
+
+    function changeSwirlColor() {
+      swirlPaletteIdx = (swirlPaletteIdx + 1) % SWIRL_PALETTES.length;
+      const palette = SWIRL_PALETTES[swirlPaletteIdx];
+      const r1 = document.getElementById('swirl-ring-1');
+      const r2 = document.getElementById('swirl-ring-2');
+      if (r1) {
+        r1.style.borderColor = palette.border1;
+        r1.style.boxShadow = `0 0 55px ${palette.shadow1}, inset 0 0 55px ${palette.shadow1}`;
+      }
+      if (r2) {
+        r2.style.borderColor = palette.border2;
+        r2.style.boxShadow = `0 0 65px ${palette.shadow2}`;
+      }
+    }
+
+    function onScreen3Click(e) {
+      if (e.target.closest('#start-now-btn') || e.target.closest('.skip-btn') || e.target.closest('#teeth-info-modal')) return;
+      changeSwirlColor();
+    }
+
+    function openTeethModal(e) {
+      if (e) e.stopPropagation();
+      const modal = document.getElementById('teeth-info-modal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeTeethModal() {
+      const modal = document.getElementById('teeth-info-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function closeTeethModalOnBackdrop(e) {
+      if (e.target.id === 'teeth-info-modal') {
+        closeTeethModal();
+      }
+    }
+
+    /* ════════════════════════════════════════════
+       INTRO SEQUENCE TRANSITION (2.5s Gap)
+    ════════════════════════════════════════════ */
+    let introTimer1 = null;
+    let introTimer2 = null;
+
+    function runIntroSequence() {
+      const card1 = document.getElementById('intro-card-1');
+      const card2 = document.getElementById('intro-card-2');
+      const introScreen = document.getElementById('intro-screen');
+      if (!card1 || !card2 || !introScreen) return;
+
+      // Website Opening Entrance Transition
+      introScreen.style.opacity = '0';
+      introScreen.style.transform = 'scale(1.04)';
+      requestAnimationFrame(() => {
+        introScreen.style.transition = 'opacity 0.65s ease, transform 0.65s ease';
+        introScreen.style.opacity = '1';
+        introScreen.style.transform = 'scale(1)';
+      });
+
+      // 1st Screen -> 2nd Screen transition after 2.5 seconds (2500 ms)
+      introTimer1 = setTimeout(() => {
+        card1.classList.remove('active');
+        card2.classList.add('active');
+
+        // 2nd Screen -> 3rd Screen transition after 2.5 seconds (2500 ms)
+        introTimer2 = setTimeout(() => {
+          finishIntro();
+        }, 2500);
+      }, 2500);
+    }
+
+    function finishIntro() {
+      if (introTimer1) clearTimeout(introTimer1);
+      if (introTimer2) clearTimeout(introTimer2);
+
+      const introScreen = document.getElementById('intro-screen');
+      if (introScreen && introScreen.style.display !== 'none') {
+        introScreen.style.opacity = '0';
+        introScreen.style.pointerEvents = 'none';
+        setTimeout(() => {
+          introScreen.style.display = 'none';
+        }, 700);
+      }
+    }
+
+    function skipIntro() {
+      finishIntro();
+    }
+
+    function onStartNowPress() {
+      const btn = document.getElementById('start-now-btn');
+      if (btn) {
+        btn.style.transform = 'scale(0.9) rotate(-2deg)';
+        btn.style.boxShadow = '0 0 35px rgba(240, 208, 255, 0.9)';
+      }
+      initAudioContext();
+
+      const startScreen = document.getElementById('start-screen');
+      if (startScreen) {
+        startScreen.style.transition = 'transform 0.35s ease, opacity 0.35s ease';
+        startScreen.style.transform = 'scale(1.06)';
+        startScreen.style.opacity = '0';
+      }
+
+      setTimeout(() => {
+        if (startScreen) {
+          startScreen.style.transform = '';
+          startScreen.style.opacity = '';
+          startScreen.style.transition = '';
+        }
+        startLevel(0);
+      }, 350);
     }
 
     /* ════════════════════════════════════════════
@@ -1438,7 +2148,7 @@
       requestAnimationFrame(idleLoop);
     }
 
-    renderLevelCards();
+    runIntroSequence();
     idleLoop();
   </script>
 </body>

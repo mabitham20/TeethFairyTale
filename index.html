@@ -141,6 +141,7 @@
   ══════════════════════════════════════ */
     #fairy {
       position: absolute;
+      bottom: 22px;
       width: 170px;
       height: 170px;
       pointer-events: none;
@@ -378,8 +379,24 @@
     .big-emoji {
       font-size: 90px;
       line-height: 1;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    }
+
+    .toothfairy-header-img {
+      width: 170px;
+      height: 170px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 24px rgba(199, 125, 255, 0.95));
+      transition: width 0.3s ease, height 0.3s ease;
+    }
+
+    .brokentooth-header-img {
+      width: 150px;
+      height: 150px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 22px rgba(255, 50, 50, 0.9));
+      transition: width 0.3s ease, height 0.3s ease;
     }
 
     .screen h1 {
@@ -822,22 +839,23 @@
       position: absolute;
       width: min(580px, 90vw);
       padding: 42px 32px;
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
+      background: rgba(22, 8, 42, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1.5px solid rgba(240, 208, 255, 0.32);
       border-radius: 28px;
       text-align: center;
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), inset 0 0 35px rgba(199, 125, 255, 0.22);
       opacity: 0;
-      transform: translateY(25px) scale(0.94);
-      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translate3d(0, 18px, 0) scale(0.96);
+      will-change: opacity, transform;
+      transition: opacity 0.45s ease-out, transform 0.45s ease-out;
       pointer-events: none;
     }
 
     .intro-card.active {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translate3d(0, 0, 0) scale(1);
       pointer-events: auto;
     }
 
@@ -1191,6 +1209,84 @@
       .purpose-text {
         font-size: 12px;
       }
+
+      /* ── Mobile Screen Aspect Ratio & Image Scaling ── */
+      .screen {
+        padding: 12px 14px 18px;
+        justify-content: center;
+      }
+
+      .toothfairy-header-img {
+        width: 88px;
+        height: 88px;
+      }
+
+      .brokentooth-header-img {
+        width: 88px;
+        height: 88px;
+      }
+
+      .big-emoji {
+        font-size: 48px;
+        margin-bottom: 4px;
+      }
+
+      .screen h1 {
+        font-size: 22px;
+        margin-bottom: 3px;
+      }
+
+      .screen > p {
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+
+      .rules-card {
+        width: min(440px, 94vw);
+        padding: 10px 12px;
+        margin: 6px 0 10px;
+        border-radius: 16px;
+      }
+
+      .rules-header {
+        gap: 6px;
+        padding-bottom: 6px;
+        margin-bottom: 6px;
+      }
+
+      .rules-header-text h3 {
+        font-size: 13.5px;
+      }
+
+      .rules-header-text p {
+        font-size: 10px;
+      }
+
+      .rules-list {
+        gap: 5px;
+      }
+
+      .rule-item {
+        font-size: 10.5px;
+        gap: 6px;
+        line-height: 1.32;
+      }
+
+      .rule-icon {
+        font-size: 13px;
+      }
+
+      .hospital-badge {
+        font-size: 9.5px;
+        padding: 2px 8px;
+        margin-bottom: 4px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 10px 30px;
+        margin: 4px;
+      }
     }
 
     /* ══════════════════════════════════════
@@ -1258,6 +1354,17 @@
 
       #info-card {
         top: 66px;
+      }
+
+      /* ── Tablet Header Image Adjustments ── */
+      .toothfairy-header-img {
+        width: 125px;
+        height: 125px;
+      }
+
+      .brokentooth-header-img {
+        width: 115px;
+        height: 115px;
       }
 
       /* ── Tablet Rules Card Adjustments ── */
@@ -1385,7 +1492,6 @@
 
   <!-- INTRO TRANSITION SCREEN (1st & 2nd Screens) -->
   <div id="intro-screen">
-    <button class="skip-btn" onclick="skipIntro()">Skip Intro ⏩</button>
 
     <!-- Colourful Ambient Lights -->
     <div class="colourful-lights-container">
@@ -1452,7 +1558,7 @@
     </div>
 
     <div class="big-emoji">
-      <img src="toothfairy.png" alt="Tooth Fairy" style="width:170px; height:170px; object-fit:contain; filter:drop-shadow(0 0 24px rgba(199,125,255,0.95));">
+      <img src="toothfairy.png" alt="Tooth Fairy" class="toothfairy-header-img">
     </div>
     <h1>NUTRI RUSH</h1>
     <p>Catch healthy foods & protect your smile!</p>
@@ -1506,7 +1612,7 @@
   <!-- GAME OVER SCREEN -->
   <div id="gameover-screen" class="screen" style="display:none">
     <div class="big-emoji">
-      <img src="broken-tooth.png" alt="Level Failed" style="width:140px; height:140px; object-fit:contain; filter:drop-shadow(0 0 22px rgba(255,50,50,0.9));">
+      <img src="broken-tooth.png" alt="Level Failed" class="brokentooth-header-img">
     </div>
     <h1 id="gameover-title">Level Failed!</h1>
     <p id="gameover-msg">Too many sugary foods were selected.<br><a style="cursor:pointer; text-decoration:underline; color:#00f2fe; font-weight:bold; display:inline-block; margin-top:8px;" onclick="openTeethModal(event)">Know More About Oral Hygiene Instructions 💡</a></p>
@@ -1828,7 +1934,12 @@
     function fairyBottomMargin() {
       return window.innerWidth <= 600 ? 10 : window.innerWidth <= 1023 ? 16 : 22;
     }
-    function gameAreaH() { return gameArea.offsetHeight; }
+    function hudH() {
+      return window.innerWidth <= 600 ? 52 : window.innerWidth <= 1023 ? 58 : 60;
+    }
+    function gameAreaH() {
+      return (gameArea && gameArea.offsetHeight > 100) ? gameArea.offsetHeight : (window.innerHeight - hudH());
+    }
     function fairyYpos() { return gameAreaH() - fairyHeight() - fairyBottomMargin(); }
 
     function moveFairy(x) {
@@ -2232,7 +2343,7 @@
     }
 
     /* ════════════════════════════════════════════
-       INTRO SEQUENCE TRANSITION (2.5s Gap)
+       INTRO SEQUENCE TRANSITION (2.5s Gap, Zero-Lag)
     ════════════════════════════════════════════ */
     let introTimer1 = null;
     let introTimer2 = null;
@@ -2242,15 +2353,6 @@
       const card2 = document.getElementById('intro-card-2');
       const introScreen = document.getElementById('intro-screen');
       if (!card1 || !card2 || !introScreen) return;
-
-      // Website Opening Entrance Transition
-      introScreen.style.opacity = '0';
-      introScreen.style.transform = 'scale(1.04)';
-      requestAnimationFrame(() => {
-        introScreen.style.transition = 'opacity 0.65s ease, transform 0.65s ease';
-        introScreen.style.opacity = '1';
-        introScreen.style.transform = 'scale(1)';
-      });
 
       // 1st Screen -> 2nd Screen transition after 2.5 seconds (2500 ms)
       introTimer1 = setTimeout(() => {
@@ -2270,41 +2372,22 @@
 
       const introScreen = document.getElementById('intro-screen');
       if (introScreen && introScreen.style.display !== 'none') {
+        introScreen.style.transition = 'opacity 0.4s ease-out';
         introScreen.style.opacity = '0';
         introScreen.style.pointerEvents = 'none';
         setTimeout(() => {
           introScreen.style.display = 'none';
-        }, 700);
+        }, 400);
       }
-    }
-
-    function skipIntro() {
-      finishIntro();
     }
 
     function onStartNowPress() {
-      const btn = document.getElementById('start-now-btn');
-      if (btn) {
-        btn.style.transform = 'scale(0.9) rotate(-2deg)';
-        btn.style.boxShadow = '0 0 35px rgba(240, 208, 255, 0.9)';
-      }
       initAudioContext();
-
       const startScreen = document.getElementById('start-screen');
       if (startScreen) {
-        startScreen.style.transition = 'transform 0.35s ease, opacity 0.35s ease';
-        startScreen.style.transform = 'scale(1.06)';
-        startScreen.style.opacity = '0';
+        startScreen.style.display = 'none';
       }
-
-      setTimeout(() => {
-        if (startScreen) {
-          startScreen.style.transform = '';
-          startScreen.style.opacity = '';
-          startScreen.style.transition = '';
-        }
-        startLevel(0);
-      }, 350);
+      startLevel(0);
     }
 
     /* ════════════════════════════════════════════

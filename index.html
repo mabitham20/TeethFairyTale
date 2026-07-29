@@ -141,10 +141,11 @@
   ══════════════════════════════════════ */
     #fairy {
       position: absolute;
-      width: 120px;
-      height: 120px;
+      width: 170px;
+      height: 170px;
       pointer-events: none;
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateZ(0);
+      will-change: transform;
       z-index: 10;
       display: flex;
       align-items: center;
@@ -173,7 +174,8 @@
       flex-direction: column;
       align-items: center;
       pointer-events: none;
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateZ(0);
+      will-change: transform;
       z-index: 5;
     }
 
@@ -1019,8 +1021,8 @@
       }
 
       #fairy {
-        width: 68px;
-        height: 68px;
+        width: 95px;
+        height: 95px;
       }
 
       #fairy-emoji {
@@ -1110,6 +1112,85 @@
         font-size: 11.5px;
         line-height: 1.45;
       }
+
+      /* ── Mobile Rules Card & Screen Adjustments ── */
+      .rules-card {
+        width: min(440px, 94vw);
+        padding: 14px 16px;
+        margin: 8px 0 14px;
+        border-radius: 18px;
+      }
+
+      .rules-header {
+        gap: 8px;
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+      }
+
+      .smiling-tooth-icon {
+        font-size: 28px;
+      }
+
+      .rules-header-text h3 {
+        font-size: 14.5px;
+      }
+
+      .rules-header-text p {
+        font-size: 11px;
+      }
+
+      .rules-list {
+        gap: 7px;
+      }
+
+      .rule-item {
+        font-size: 11.5px;
+        gap: 8px;
+        line-height: 1.38;
+      }
+
+      .rule-icon {
+        font-size: 14px;
+      }
+
+      .hospital-badge {
+        font-size: 10.5px;
+        padding: 3px 10px;
+        margin-bottom: 6px;
+      }
+
+      .intro-card {
+        padding: 28px 20px;
+        border-radius: 20px;
+      }
+
+      .intro-title {
+        font-size: 18px;
+      }
+
+      .teeth-modal-card {
+        padding: 22px 18px;
+        border-radius: 22px;
+        max-height: 88vh;
+        overflow-y: auto;
+      }
+
+      .teeth-modal-avatar {
+        font-size: 40px;
+      }
+
+      .teeth-modal-title h2 {
+        font-size: 18px;
+      }
+
+      .purpose-item {
+        padding: 9px 12px;
+        gap: 9px;
+      }
+
+      .purpose-text {
+        font-size: 12px;
+      }
     }
 
     /* ══════════════════════════════════════
@@ -1137,8 +1218,8 @@
       }
 
       #fairy {
-        width: 90px;
-        height: 90px;
+        width: 130px;
+        height: 130px;
       }
 
       #fairy-emoji {
@@ -1177,6 +1258,34 @@
 
       #info-card {
         top: 66px;
+      }
+
+      /* ── Tablet Rules Card Adjustments ── */
+      .rules-card {
+        width: min(480px, 90vw);
+        padding: 16px 20px;
+        margin: 10px 0 16px;
+      }
+
+      .rules-header-text h3 {
+        font-size: 16px;
+      }
+
+      .rule-item {
+        font-size: 12.5px;
+        gap: 8px;
+      }
+
+      .intro-card {
+        padding: 34px 24px;
+      }
+
+      .intro-title {
+        font-size: 22px;
+      }
+
+      .teeth-modal-card {
+        padding: 24px 20px;
       }
     }
 
@@ -1224,7 +1333,7 @@
   <!-- Game area -->
   <div id="game-area">
     <div id="fairy">
-      <span id="fairy-emoji">🧚‍♀️</span>
+      <img src="toothfairy.png" alt="Tooth Fairy" onerror="handleImgError(this, '🧚‍♀️')">
     </div>
   </div>
 
@@ -1232,7 +1341,9 @@
   <div id="teeth-info-modal" onclick="closeTeethModalOnBackdrop(event)">
     <div class="teeth-modal-card">
       <div class="teeth-modal-header">
-        <div class="teeth-modal-avatar">🦷😁</div>
+        <div class="teeth-modal-avatar">
+          <img src="toothfairy.png" alt="Tooth Fairy" style="width:70px; height:70px; object-fit:contain;">
+        </div>
         <div class="teeth-modal-title">
           <h2>HI, I'M YOUR TEETH!</h2>
           <p>Discover Why I Am So Important To You ✨</p>
@@ -1299,7 +1410,9 @@
     <div id="intro-card-1" class="intro-card active">
       <div class="intro-badge">🏛️ Institutional Partner</div>
       <h2 class="intro-title">CHETTINAD DENTAL COLLEGE AND RESEARCH INSTITUTE</h2>
-      <div class="intro-tooth-icon">🦷✨</div>
+      <div class="intro-tooth-icon">
+        <img src="toothfairy.png" alt="Tooth Fairy" style="width:90px; height:90px; object-fit:contain;">
+      </div>
       <div class="hospital-badge">🏥 Dental Hospital & Medical Research Campus</div>
     </div>
 
@@ -1338,7 +1451,9 @@
       <div class="floating-tooth-bg" style="top: 46%; right: 4%; animation-delay: 2.5s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
     </div>
 
-    <div class="big-emoji">🧚‍♀️</div>
+    <div class="big-emoji">
+      <img src="toothfairy.png" alt="Tooth Fairy" style="width:170px; height:170px; object-fit:contain; filter:drop-shadow(0 0 24px rgba(199,125,255,0.95));">
+    </div>
     <h1>NUTRI RUSH</h1>
     <p>Catch healthy foods & protect your smile!</p>
     <div class="hospital-badge" style="margin-bottom: 10px;">🏥 Chettinad Dental Hospital Public Health Initiative</div>
@@ -1390,13 +1505,15 @@
 
   <!-- GAME OVER SCREEN -->
   <div id="gameover-screen" class="screen" style="display:none">
-    <div class="big-emoji">💔</div>
+    <div class="big-emoji">
+      <img src="broken-tooth.png" alt="Level Failed" style="width:140px; height:140px; object-fit:contain; filter:drop-shadow(0 0 22px rgba(255,50,50,0.9));">
+    </div>
     <h1 id="gameover-title">Level Failed!</h1>
-    <p id="gameover-msg">Restarting from Level 1...</p>
+    <p id="gameover-msg">Too many sugary foods were selected.<br><a style="cursor:pointer; text-decoration:underline; color:#00f2fe; font-weight:bold; display:inline-block; margin-top:8px;" onclick="openTeethModal(event)">Know More About Oral Hygiene Instructions 💡</a></p>
     <div class="final-score" id="final-score">0</div>
     <div class="score-label">Final Score</div>
     <div>
-      <button class="btn" onclick="retryLevel()">Restart Level 1 🔁</button>
+      <button class="btn" onclick="retryLevel()">Play Again 🔁</button>
     </div>
   </div>
 
@@ -1498,7 +1615,7 @@
           { img: 'spinach.png', emoji: '🥬', name: 'Spinach', points: 10, weight: 8, sub: 'Vitamin K', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
           { img: 'broccoli.png', emoji: '🥦', name: 'Broccoli', points: 10, weight: 8, sub: 'Vitamin C', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
           { emoji: '🥭', name: 'Mango', points: 10, weight: 8, sub: 'Vitamin A', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
-          { emoji: '🍈', name: 'Papaya', points: 10, weight: 8, sub: 'Vitamin C', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
+          { img: 'papaya.png', emoji: '🍈', name: 'Papaya', points: 10, weight: 8, sub: 'Vitamin C', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
           { img: 'eggs.png', emoji: '🥚', name: 'Egg', points: 10, weight: 8, sub: 'Vitamin D', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
           { img: 'milk.png', emoji: '🥛', name: 'Milk', points: 10, weight: 8, sub: 'Vitamin D', tagline: 'Bonus Food +10', detail: 'Vitamin-rich pick — a great catch for a healthy smile.' },
 
@@ -1560,10 +1677,13 @@
     ];
 
     /* ════════════════════════════════════════════
-       SOUND EFFECTS (MP3 with Web Audio Fallback)
+       SOUND EFFECTS & BACKGROUND MUSIC
     ════════════════════════════════════════════ */
     const audioYes = new Audio('yes.mp3');
     const audioNo = new Audio('wrong.mp3');
+    const audioYay = new Audio('yay.mp3');
+    const audioJourney = new Audio('journey.mp3');
+    audioJourney.loop = true;
     let audioCtx = null;
 
     function initAudioContext() {
@@ -1573,6 +1693,37 @@
       if (audioCtx.state === 'suspended') {
         audioCtx.resume();
       }
+    }
+
+    function playJourneyMusic(resetToStart = false) {
+      initAudioContext();
+      if (resetToStart) {
+        audioJourney.currentTime = 0;
+      }
+      audioJourney.play().catch(() => {});
+    }
+
+    function pauseJourneyMusic(resetToStart = false) {
+      audioJourney.pause();
+      if (resetToStart) {
+        audioJourney.currentTime = 0;
+      }
+    }
+
+    function playExcitementFanfare() {
+      initAudioContext();
+      audioYay.currentTime = 0;
+      audioYay.play().catch(() => {
+        audioYes.currentTime = 0;
+        audioYes.play().catch(() => {});
+      });
+
+      const fanfareNotes = [523.25, 659.25, 783.99, 1046.50];
+      fanfareNotes.forEach((freq, idx) => {
+        setTimeout(() => {
+          playSynthBeep(freq, 'triangle', 0.35);
+        }, idx * 120);
+      });
     }
 
     function playSynthBeep(freq, type, duration) {
@@ -1611,7 +1762,7 @@
     }
 
     /* ════════════════════════════════════════════
-       STARS CANVAS
+       STARS CANVAS (Optimized to reduce opening lag)
     ════════════════════════════════════════════ */
     const starsCanvas = document.getElementById('stars-canvas');
     const ctx = starsCanvas.getContext('2d');
@@ -1621,7 +1772,7 @@
       starsCanvas.width = window.innerWidth;
       starsCanvas.height = window.innerHeight;
       stars = [];
-      const count = Math.floor((window.innerWidth * window.innerHeight) / 3000);
+      const count = Math.min(80, Math.floor((window.innerWidth * window.innerHeight) / 7000));
       for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * starsCanvas.width,
@@ -1636,14 +1787,13 @@
 
     function drawStars() {
       ctx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
-      stars.forEach(s => {
+      for (let i = 0; i < stars.length; i++) {
+        const s = stars[i];
         s.alpha += s.speed;
         if (s.alpha > 1 || s.alpha < 0) s.speed = -s.speed;
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${Math.abs(s.alpha)})`;
-        ctx.fill();
-      });
+        ctx.fillRect(s.x, s.y, s.r * 2, s.r * 2);
+      }
     }
 
     /* ════════════════════════════════════════════
@@ -1672,11 +1822,17 @@
     const fairyEl = document.getElementById('fairy');
     let infoTimer = null;
 
+    function fairyHeight() {
+      return window.innerWidth <= 600 ? 95 : window.innerWidth <= 1023 ? 130 : 170;
+    }
+    function fairyBottomMargin() {
+      return window.innerWidth <= 600 ? 10 : window.innerWidth <= 1023 ? 16 : 22;
+    }
     function gameAreaH() { return gameArea.offsetHeight; }
-    function fairyYpos() { return gameAreaH() - 90; }
+    function fairyYpos() { return gameAreaH() - fairyHeight() - fairyBottomMargin(); }
 
     function moveFairy(x) {
-      const half = window.innerWidth <= 600 ? 34 : window.innerWidth <= 1023 ? 45 : 60;
+      const half = fairyHeight() / 2;
       fairyX = Math.max(half, Math.min(window.innerWidth - half, x));
       fairyEl.style.left = fairyX + 'px';
       fairyEl.style.top = fairyYpos() + 'px';
@@ -1870,7 +2026,8 @@
         spawnMs = Math.max(700, spawnMs - 8);
       }
 
-      const fy = fairyYpos();
+      const fy = fairyYpos() + fairyHeight() * 0.45;
+      const catchRadius = Math.max(52, fairyHeight() * 0.55);
 
       for (let i = items.length - 1; i >= 0; i--) {
         const it = items[i];
@@ -1879,7 +2036,7 @@
         it.y += it.speed;
         it.el.style.top = it.y + 'px';
 
-        if (Math.abs(it.x - fairyX) < CATCH_R && Math.abs(it.y - fy) < CATCH_R) {
+        if (Math.abs(it.x - fairyX) < catchRadius && Math.abs(it.y - fy) < catchRadius) {
           it.caught = true;
           it.el.remove();
           items.splice(i, 1);
@@ -1927,6 +2084,13 @@
     function startLevel(idx) {
       if (idx >= LEVELS.length) idx = 0;
       initAudioContext();
+
+      if (idx === 0) {
+        playJourneyMusic(true);
+      } else {
+        playJourneyMusic(false);
+      }
+
       currentLevelIdx = idx;
       currentLevel = LEVELS[idx];
 
@@ -1979,12 +2143,15 @@
         const hasNext = currentLevelIdx + 1 < LEVELS.length;
 
         if (hasNext) {
+          pauseJourneyMusic(false);
           document.getElementById('lc-emoji').textContent = '🎉';
           document.getElementById('lc-title').textContent = `${currentLevel.shortName} Complete!`;
           document.getElementById('lc-msg').textContent = "Nice catching! Here's your score:";
           document.getElementById('lc-next-btn').style.display = 'inline-block';
           document.getElementById('lc-playagain-btn').style.display = 'none';
         } else {
+          pauseJourneyMusic(true);
+          playExcitementFanfare();
           document.getElementById('lc-emoji').textContent = '🏆';
           document.getElementById('lc-title').textContent = 'Game Complete!';
           document.getElementById('lc-msg').textContent = 'Congratulations! You beat all 3 levels!';
@@ -1995,11 +2162,12 @@
         document.getElementById('lc-score').textContent = score;
         document.getElementById('levelclear-screen').style.display = 'flex';
       } else {
+        pauseJourneyMusic(true);
+        audioNo.currentTime = 0;
+        audioNo.play().catch(() => {});
         document.getElementById('gameover-title').textContent = 'Level Failed!';
-        document.getElementById('gameover-msg').textContent =
-          currentLevel.lives !== null && lives <= 0
-            ? 'All your teeth are gone! You must restart from Level 1.'
-            : "Time's up! You must restart from Level 1.";
+        document.getElementById('gameover-msg').innerHTML =
+          'Too many sugary foods were selected.<br><a style="cursor:pointer; text-decoration:underline; color:#00f2fe; font-weight:bold; display:inline-block; margin-top:8px;" onclick="openTeethModal(event)">Know More About Oral Hygiene Instructions 💡</a>';
         document.getElementById('final-score').textContent = score;
         document.getElementById('gameover-screen').style.display = 'flex';
       }

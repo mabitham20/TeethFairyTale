@@ -701,12 +701,14 @@
     }
 
     .teeth-modal-card {
-      width: min(520px, 92vw);
-      background: linear-gradient(135deg, rgba(30, 8, 60, 0.96), rgba(10, 24, 62, 0.96));
+      width: min(560px, 94vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: linear-gradient(135deg, rgba(30, 8, 60, 0.98), rgba(10, 24, 62, 0.98));
       border: 2px solid rgba(240, 208, 255, 0.42);
       border-radius: 28px;
-      padding: 28px 24px;
-      text-align: left;
+      padding: 20px;
+      text-align: center;
       box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 50px rgba(199, 125, 255, 0.35);
       transform: scale(0.88) translateY(25px);
       transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -716,72 +718,15 @@
       transform: scale(1) translateY(0);
     }
 
-    .teeth-modal-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
-      padding-bottom: 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-    }
-
-    .teeth-modal-avatar {
-      font-size: 50px;
-      filter: drop-shadow(0 0 15px rgba(240, 208, 255, 0.9));
-      animation: floatTooth 3s ease-in-out infinite alternate;
-    }
-
-    .teeth-modal-title h2 {
-      font-size: 22px;
-      font-weight: 900;
-      color: #ffffff;
-      margin: 0;
-      letter-spacing: 0.5px;
-      font-family: "Segoe UI", sans-serif;
-    }
-
-    .teeth-modal-title p {
-      font-size: 13px;
-      color: #00f2fe;
-      margin-top: 3px;
-      font-weight: 700;
-      font-family: "Segoe UI", sans-serif;
-    }
-
-    .teeth-purpose-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .purpose-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.06);
-      padding: 11px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .purpose-icon {
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-
-    .purpose-text {
-      font-size: 13px;
-      color: #e6e0f8;
-      line-height: 1.45;
-      font-family: "Segoe UI", sans-serif;
-    }
-
-    .purpose-text strong {
-      color: #7aff7a;
+    .teeth-modal-img {
+      width: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
       display: block;
-      margin-bottom: 2px;
-      font-size: 13.5px;
+      margin: 0 auto 16px auto;
+      background: #ffffff;
     }
 
     .teeth-modal-btn {
@@ -1447,45 +1392,7 @@
   <!-- TEETH INFO MODAL ("HI, I'M YOUR TEETH") -->
   <div id="teeth-info-modal" onclick="closeTeethModalOnBackdrop(event)">
     <div class="teeth-modal-card">
-      <div class="teeth-modal-header">
-        <div class="teeth-modal-avatar">
-          <img src="toothfairy.png" alt="Tooth Fairy" style="width:70px; height:70px; object-fit:contain;">
-        </div>
-        <div class="teeth-modal-title">
-          <h2>HI, I'M YOUR TEETH!</h2>
-          <p>Discover Why I Am So Important To You ✨</p>
-        </div>
-      </div>
-      <div class="teeth-purpose-list">
-        <div class="purpose-item">
-          <div class="purpose-icon">🍎</div>
-          <div class="purpose-text">
-            <strong>1. Chewing & Digestion</strong>
-            I chew and break down food into small, digestible pieces so your body can absorb essential nutrients and vitamins.
-          </div>
-        </div>
-        <div class="purpose-item">
-          <div class="purpose-icon">🗣️</div>
-          <div class="purpose-text">
-            <strong>2. Speech & Clear Communication</strong>
-            I work with your tongue and lips to help you pronounce words clearly and speak with confidence!
-          </div>
-        </div>
-        <div class="purpose-item">
-          <div class="purpose-icon">😁</div>
-          <div class="purpose-text">
-            <strong>3. Facial Structure & Beautiful Smile</strong>
-            I support your jawline, maintain your face shape, and help you share bright, healthy smiles with everyone.
-          </div>
-        </div>
-        <div class="purpose-item">
-          <div class="purpose-icon">🛡️</div>
-          <div class="purpose-text">
-            <strong>4. Protection & Oral Hygiene</strong>
-            Strong tooth enamel forms a natural shield to protect your gums and prevent harmful decay.
-          </div>
-        </div>
-      </div>
+      <img src="ref.png" alt="Oral Hygiene Instructions" class="teeth-modal-img" onerror="handleImgError(this, '🦷')">
       <button class="teeth-modal-btn" onclick="closeTeethModal()">Got it! Protect My Teeth 🦷✨</button>
     </div>
   </div>
@@ -1570,7 +1477,7 @@
         <div class="smiling-tooth-icon" style="cursor: pointer;" onclick="openTeethModal(event)" title="Touch me to learn about your teeth!">🦷😁</div>
         <div class="rules-header-text">
           <h3>Rules & Regulations</h3>
-          <p>Touch the smiling tooth to learn your teeth's purpose! 💡</p>
+          <p>Touch the smiling tooth to view Oral Hygiene Instructions! 💡</p>
         </div>
       </div>
       <div class="rules-list">

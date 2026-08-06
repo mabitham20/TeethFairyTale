@@ -563,9 +563,17 @@
     }
 
     @keyframes floatTooth {
-      0% { transform: translateY(0px) rotate(0deg) scale(1); }
-      50% { transform: translateY(-22px) rotate(12deg) scale(1.1); }
-      100% { transform: translateY(16px) rotate(-10deg) scale(0.92); }
+      0% {
+        transform: translateY(0px) rotate(0deg) scale(1);
+      }
+
+      50% {
+        transform: translateY(-22px) rotate(12deg) scale(1.1);
+      }
+
+      100% {
+        transform: translateY(16px) rotate(-10deg) scale(0.92);
+      }
     }
 
     /* ══════════════════════════════════════
@@ -624,9 +632,17 @@
     }
 
     @keyframes floatLight {
-      0% { transform: translate(0, 0) scale(1); }
-      50% { transform: translate(30px, -25px) scale(1.15); }
-      100% { transform: translate(-20px, 20px) scale(0.92); }
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(30px, -25px) scale(1.15);
+      }
+
+      100% {
+        transform: translate(-20px, 20px) scale(0.92);
+      }
     }
 
     /* ══════════════════════════════════════
@@ -665,15 +681,31 @@
     }
 
     @keyframes rotateSwirl {
-      0% { transform: rotate(0deg) scale(1); }
-      50% { transform: rotate(180deg) scale(1.04); }
-      100% { transform: rotate(360deg) scale(1); }
+      0% {
+        transform: rotate(0deg) scale(1);
+      }
+
+      50% {
+        transform: rotate(180deg) scale(1.04);
+      }
+
+      100% {
+        transform: rotate(360deg) scale(1);
+      }
     }
 
     @keyframes rotateSwirlReverse {
-      0% { transform: rotate(360deg) scale(1.02); }
-      50% { transform: rotate(180deg) scale(0.96); }
-      100% { transform: rotate(0deg) scale(1.02); }
+      0% {
+        transform: rotate(360deg) scale(1.02);
+      }
+
+      50% {
+        transform: rotate(180deg) scale(0.96);
+      }
+
+      100% {
+        transform: rotate(0deg) scale(1.02);
+      }
     }
 
     /* ══════════════════════════════════════
@@ -897,8 +929,13 @@
     }
 
     @keyframes toothSmilePulse {
-      0% { transform: scale(1) rotate(-4deg); }
-      100% { transform: scale(1.12) rotate(4deg); }
+      0% {
+        transform: scale(1) rotate(-4deg);
+      }
+
+      100% {
+        transform: scale(1.12) rotate(4deg);
+      }
     }
 
     .rules-header-text h3 {
@@ -946,8 +983,15 @@
     }
 
     @keyframes startBtnPulse {
-      0% { box-shadow: 0 5px 24px rgba(140, 0, 255, 0.5); transform: scale(1); }
-      100% { box-shadow: 0 10px 40px rgba(199, 125, 255, 0.9); transform: scale(1.04); }
+      0% {
+        box-shadow: 0 5px 24px rgba(140, 0, 255, 0.5);
+        transform: scale(1);
+      }
+
+      100% {
+        box-shadow: 0 10px 40px rgba(199, 125, 255, 0.9);
+        transform: scale(1.04);
+      }
     }
 
     /* ══════════════════════════════════════
@@ -1181,7 +1225,7 @@
         margin-bottom: 3px;
       }
 
-      .screen > p {
+      .screen>p {
         font-size: 12px;
         margin-bottom: 6px;
       }
@@ -1456,12 +1500,18 @@
 
     <!-- Aesthetic Teeth Background -->
     <div class="teeth-bg-container">
-      <div class="floating-tooth-bg" style="top: 6%; left: 8%; animation-delay: 0s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
-      <div class="floating-tooth-bg" style="top: 12%; right: 10%; animation-delay: 2s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
-      <div class="floating-tooth-bg" style="bottom: 16%; left: 10%; animation-delay: 4s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
-      <div class="floating-tooth-bg" style="bottom: 8%; right: 6%; animation-delay: 1s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
-      <div class="floating-tooth-bg" style="top: 40%; left: 3%; animation-delay: 3s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
-      <div class="floating-tooth-bg" style="top: 46%; right: 4%; animation-delay: 2.5s; cursor: pointer;" onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="top: 6%; left: 8%; animation-delay: 0s; cursor: pointer;"
+        onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="top: 12%; right: 10%; animation-delay: 2s; cursor: pointer;"
+        onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="bottom: 16%; left: 10%; animation-delay: 4s; cursor: pointer;"
+        onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="bottom: 8%; right: 6%; animation-delay: 1s; cursor: pointer;"
+        onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="top: 40%; left: 3%; animation-delay: 3s; cursor: pointer;"
+        onclick="openTeethModal(event)" title="Touch me!">🦷</div>
+      <div class="floating-tooth-bg" style="top: 46%; right: 4%; animation-delay: 2.5s; cursor: pointer;"
+        onclick="openTeethModal(event)" title="Touch me!">🦷</div>
     </div>
 
     <div class="big-emoji">
@@ -1474,7 +1524,8 @@
     <!-- Rules & Regulations Aesthetic Box with Smiling Tooth -->
     <div class="rules-card">
       <div class="rules-header">
-        <div class="smiling-tooth-icon" style="cursor: pointer;" onclick="openTeethModal(event)" title="Touch me to learn about your teeth!">🦷😁</div>
+        <div class="smiling-tooth-icon" style="cursor: pointer;" onclick="openTeethModal(event)"
+          title="Touch me to learn about your teeth!">🦷😁</div>
         <div class="rules-header-text">
           <h3>Rules & Regulations</h3>
           <p>Touch the smiling tooth to view Oral Hygiene Instructions! 💡</p>
@@ -1483,19 +1534,23 @@
       <div class="rules-list">
         <div class="rule-item">
           <span class="rule-icon">🥜</span>
-          <div><strong>1. Catch Healthy Foods:</strong> Catch peanuts 🥜, eggs 🥚, broccoli 🥦, spinach 🥬, milk 🥛, oats 🥣, idli 🥟 & dosa 🥞 to score points.</div>
+          <div><strong>1. Catch Healthy Foods:</strong> Catch peanuts 🥜, eggs 🥚, broccoli 🥦, spinach 🥬, milk 🥛,
+            oats 🥣, idli 🥟 & dosa 🥞 to score points.</div>
         </div>
         <div class="rule-item">
           <span class="rule-icon">🍬</span>
-          <div><strong>2. Dodge Junk & Traps:</strong> Avoid candies 🍬, sodas 🥤, chips 🍟, fried foods 🍗 & cigarettes 🚬 to save your score and teeth.</div>
+          <div><strong>2. Dodge Junk & Traps:</strong> Avoid candies 🍬, sodas 🥤, chips 🍟, fried foods 🍗 & cigarettes
+            🚬 to save your score and teeth.</div>
         </div>
         <div class="rule-item">
           <span class="rule-icon">🦷</span>
-          <div><strong>3. Protect Your Tooth Lives:</strong> Don't lose all 3 tooth lives or let the countdown timer reach zero.</div>
+          <div><strong>3. Protect Your Tooth Lives:</strong> Don't lose all 3 tooth lives or let the countdown timer
+            reach zero.</div>
         </div>
         <div class="rule-item">
           <span class="rule-icon">🏆</span>
-          <div><strong>4. Master All 3 Levels:</strong> Beat Level 1, Level 2, and Level 3 to win the ultimate Nutri Rush trophy!</div>
+          <div><strong>4. Master All 3 Levels:</strong> Beat Level 1, Level 2, and Level 3 to win the ultimate Nutri
+            Rush trophy!</div>
         </div>
       </div>
     </div>
@@ -1522,7 +1577,9 @@
       <img src="broken-tooth.png" alt="Level Failed" class="brokentooth-header-img">
     </div>
     <h1 id="gameover-title">Level Failed!</h1>
-    <p id="gameover-msg">Too many sugary foods were selected.<br><a style="cursor:pointer; text-decoration:underline; color:#00f2fe; font-weight:bold; display:inline-block; margin-top:8px;" onclick="openTeethModal(event)">Know More About Oral Hygiene Instructions 💡</a></p>
+    <p id="gameover-msg">Too many sugary foods were selected.<br><a
+        style="cursor:pointer; text-decoration:underline; color:#00f2fe; font-weight:bold; display:inline-block; margin-top:8px;"
+        onclick="openTeethModal(event)">Know More About Oral Hygiene Instructions 💡</a></p>
     <div class="final-score" id="final-score">0</div>
     <div class="score-label">Final Score</div>
     <div>
@@ -1693,7 +1750,7 @@
        SOUND EFFECTS & BACKGROUND MUSIC
     ════════════════════════════════════════════ */
     const audioYes = new Audio('yes.mp3');
-    const audioNo = new Audio('wrong.mp3');
+    const audioNo = new Audio('incorrect.mp3');
     const audioYay = new Audio('yay.mp3');
     const audioJourney = new Audio('journey.mp3');
     audioJourney.loop = true;
@@ -1713,7 +1770,7 @@
       if (resetToStart) {
         audioJourney.currentTime = 0;
       }
-      audioJourney.play().catch(() => {});
+      audioJourney.play().catch(() => { });
     }
 
     function pauseJourneyMusic(resetToStart = false) {
@@ -1728,7 +1785,7 @@
       audioYay.currentTime = 0;
       audioYay.play().catch(() => {
         audioYes.currentTime = 0;
-        audioYes.play().catch(() => {});
+        audioYes.play().catch(() => { });
       });
 
       const fanfareNotes = [523.25, 659.25, 783.99, 1046.50];
@@ -2171,8 +2228,8 @@
           pauseJourneyMusic(true);
           playExcitementFanfare();
           document.getElementById('lc-emoji').textContent = '🏆';
-          document.getElementById('lc-title').textContent = 'Game Complete!';
-          document.getElementById('lc-msg').textContent = 'Congratulations! You beat all 3 levels!';
+          document.getElementById('lc-title').textContent = 'MISSION COMPLETED';
+          document.getElementById('lc-msg').textContent = 'YOU ARE A TOOTH HERO';
           document.getElementById('lc-next-btn').style.display = 'none';
           document.getElementById('lc-playagain-btn').style.display = 'inline-block';
         }
@@ -2182,7 +2239,7 @@
       } else {
         pauseJourneyMusic(true);
         audioNo.currentTime = 0;
-        audioNo.play().catch(() => {});
+        audioNo.play().catch(() => { });
         document.getElementById('gameover-title').textContent = 'Level Failed!';
         document.getElementById('gameover-msg').innerHTML =
           'Too many sugary foods were selected.<br><a style="cursor:pointer; text-decoration:underline; color:#00f2fe; font-weight:bold; display:inline-block; margin-top:8px;" onclick="openTeethModal(event)">Know More About Oral Hygiene Instructions 💡</a>';
